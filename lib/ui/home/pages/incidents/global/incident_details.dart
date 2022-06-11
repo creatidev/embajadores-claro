@@ -689,6 +689,7 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
               key: keyCancel,
               tooltip: 'Cancelar',
               backgroundColor: _colors.contextColor(context),
+              heroTag: "cancelar",
               child: Container(
                 margin: const EdgeInsets.all(2),
                 child: Icon(
@@ -705,6 +706,7 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
               visible: prefs.userRolId != '4',
               child: FloatingActionButton(
                 key: keySave,
+                heroTag: "actualizar",
                 tooltip: 'Enviar actualización',
                 backgroundColor: _colors.contextColor(context),
                 child: Container(

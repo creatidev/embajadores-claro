@@ -31,7 +31,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
   final _notesController = TextEditingController();
   final _usersController = TextEditingController();
   final CustomColors _colors = CustomColors();
-  List<int>? _selectedComponents = [];
+  final List<int> _selectedComponents = [];
   List<Component>? _listComponents = [];
   APIService apiService = APIService();
   ReportIncident? _reportIncident;
@@ -68,7 +68,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
 
   void clearComponentList() {
     setState(() {
-      _selectedComponents!.clear();
+      _selectedComponents.clear();
       _listComponents!.clear();
     });
   }
@@ -675,7 +675,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
                             },
                             onTap: () {
                               setState(
-                                      () => _selectedComponents!.clear());
+                                      () => _selectedComponents.clear());
                             },
                           );
                         }),
@@ -730,7 +730,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
                                       values.cast<Component>();
                                   for (var value
                                   in _listComponents!) {
-                                    _selectedComponents!
+                                    _selectedComponents
                                         .add(value.id!);
                                   }
                                 });
@@ -743,7 +743,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
                                 onTap: (ServiceInfo? value) {
                                   setState(() {
                                     _listComponents!.remove(value);
-                                    _selectedComponents!
+                                    _selectedComponents
                                         .remove(value!.id);
                                   });
                                 },
@@ -848,6 +848,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
             FloatingActionButton(
               key: keyCancel,
               backgroundColor: _colors.contextColor(context),
+              heroTag: "cancelar",
               tooltip: 'Cancelar',
               child: Container(
                 margin: const EdgeInsets.all(2),
@@ -864,6 +865,7 @@ class RegisterIncidentState extends State<RegisterIncident> {
             FloatingActionButton(
               key: keySave,
               backgroundColor: _colors.contextColor(context),
+              heroTag: "guardar",
               tooltip: 'Registrar tienda',
               child: Container(
                 margin: const EdgeInsets.all(2),
