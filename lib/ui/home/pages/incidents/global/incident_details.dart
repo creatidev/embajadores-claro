@@ -6,9 +6,9 @@ import 'package:embajadores/data/services/api_service.dart';
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:embajadores/ui/home/pages/stores/changes_history.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -38,7 +38,7 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
   var keyHelp = GlobalKey();
   var keySave = GlobalKey();
   int? _selectedStatus;
-  int _affected = 0;
+  late int? _affected;
   String? _notes;
 
   @override
@@ -46,6 +46,7 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
     // TODO: implement initState
     super.initState();
     _selectedStatus = widget.incident!.idEstado;
+    _affected = widget.incident!.incUsuariosAfectados;
     _updateIncident = UpdateIncident();
     if (prefs.firstViewOrEdit == true) {
       Future.delayed(const Duration(microseconds: 3000)).then((value) {
@@ -378,408 +379,348 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
   Widget build(BuildContext context) {
     _ultimaFecha = DateFormat('dd MMM yyyy - hh:mm a')
         .format(widget.incident!.incFechaApertura!);
-    return NeumorphicTheme(
-      theme: NeumorphicThemeData(
-        lightSource: LightSource.topLeft,
-        accentColor: NeumorphicColors.accent,
-        appBarTheme: NeumorphicAppBarThemeData(
-            buttonStyle: NeumorphicStyle(
-              color: _colors.iconsColor(context),
-              shadowLightColor: _colors.iconsColor(context),
-              boxShape: const NeumorphicBoxShape.circle(),
-              shape: NeumorphicShape.flat,
-              depth: 2,
-              intensity: 0.9,
-            ),
-            textStyle:
-                TextStyle(color: _colors.textColor(context), fontSize: 12),
-            iconTheme:
-                IconThemeData(color: _colors.textColor(context), size: 25)),
-        depth: 1,
-        intensity: 5,
-      ),
-      child: Scaffold(
-        appBar: NeumorphicAppBar(
-          leading: Container(
-            padding: const EdgeInsets.all(5),
-            child: NeumorphicIcon(
-              Icons.update,
-              size: 50,
-              style: NeumorphicStyle(
-                  color: _colors.iconsColor(context),
-                  shape: NeumorphicShape.flat,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                  shadowLightColor: _colors.shadowColor(context),
-                  depth: 1.5,
-                  intensity: 0.7),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: _colors.contextColor(context),
+        foregroundColor: _colors.iconsColor(context),
+        leading: Container(
+          padding: const EdgeInsets.all(5),
+          child: Icon(
+            Icons.update,
+            color: _colors.iconsColor(context),
+            size: 50,
           ),
-          title: AutoSizeText(
-            'Actualizar incidente: '
-            '${widget.incident!.ineNombre}',
-            maxLines: 1,
-            minFontSize: 8,
-            style: TextStyle(
-                color: _colors.textColor(context),
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
-          ),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                FormHelper.showMessage(
-                  context,
-                  "Embajadores",
-                  "¿Ver tutorial de la sección?",
-                  "Si",
-                  () {
-                    setTutorial();
-                    showTutorial();
-                    Navigator.of(context).pop();
-                  },
-                  buttonText2: "No",
-                  isConfirmationDialog: true,
-                  onPressed2: () {
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: NeumorphicIcon(
-                  Icons.help_outline,
-                  key: keyHelp,
-                  size: 40,
-                  style: NeumorphicStyle(
-                      color: _colors.iconsColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 1.5,
-                      intensity: 0.7),
-                ),
+        ),
+        title: AutoSizeText(
+          'Actualizar incidente: '
+              '${widget.incident!.ineNombre}',
+          maxLines: 1,
+          minFontSize: 8,
+          style: TextStyle(
+              color: _colors.textColor(context),
+              fontWeight: FontWeight.bold,
+              fontSize: 16),
+        ),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              FormHelper.showMessage(
+                context,
+                "Embajadores",
+                "¿Ver tutorial de la sección?",
+                "Si",
+                    () {
+                  setTutorial();
+                  showTutorial();
+                  Navigator.of(context).pop();
+                },
+                buttonText2: "No",
+                isConfirmationDialog: true,
+                onPressed2: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                Icons.help_outline,
+                color: _colors.iconsColor(context),
+                key: keyHelp,
+                size: 40,
               ),
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          physics: const ScrollPhysics(),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 100.0),
-            child: Wrap(children: <Widget>[
-              FormBuilder(
-                key: _formKeyCard,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    infoContainer(Icons.miscellaneous_services,
-                        'Servicio afectado:', widget.incident!.serNombre!),
-                    infoContainer(Icons.store, 'Tienda:',
-                        '${widget.incident!.tieNombre}'),
-                    ExpansionTile(
-                      initiallyExpanded: widget.expanded!,
-                      title: Text(
-                        'ID incidente: ${widget.incident!.idIncidencia}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            infoContainer(Icons.featured_play_list,
-                                'Componentes afectados:', ''),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: AutoSizeText(
-                                widget.incident!.componentes!
-                                    .replaceAll(',', '\n'),
-                                maxLines: 10,
-                                minFontSize: 4,
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: _colors.textColor(context)),
-                              ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        physics: const ScrollPhysics(),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 100.0),
+          child: Wrap(children: <Widget>[
+            FormBuilder(
+              key: _formKeyCard,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  infoContainer(Icons.miscellaneous_services,
+                      'Servicio afectado:', widget.incident!.serNombre!),
+                  infoContainer(Icons.store, 'Tienda:',
+                      '${widget.incident!.tieNombre}'),
+                  ExpansionTile(
+                    initiallyExpanded: widget.expanded!,
+                    title: Text(
+                      'ID incidente: ${widget.incident!.idIncidencia}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          infoContainer(Icons.featured_play_list,
+                              'Componentes afectados:', ''),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: AutoSizeText(
+                              widget.incident!.componentes!
+                                  .replaceAll(',', '\n'),
+                              maxLines: 10,
+                              minFontSize: 4,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: _colors.textColor(context)),
                             ),
-                            infoContainer(Icons.location_city, 'Tipo de falla:',
-                                widget.incident!.tpfNombre!),
-                            infoContainer(Icons.location_city, 'Ciudad:',
-                                widget.incident!.ciuNombre!),
-                            infoContainer(
-                                Icons.date_range, 'Registrado:', _ultimaFecha),
-                            infoContainer(Icons.support_agent, 'Registra:',
-                                '${widget.incident!.usuNombre} ${widget.incident!.usuApellidos}'),
-                            infoContainer(
-                                Icons.supervised_user_circle_outlined,
-                                'Usuarios en operación:',
-                                widget.incident!.incUsuariosOperacion
-                                    .toString()),
-                            infoContainer(
-                                Icons.help_outline_outlined,
-                                'Usuarios afectados:',
-                                widget.incident!.incUsuariosAfectados
-                                    .toString()),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                infoContainer(Icons.circle, 'Estado:',
-                                    '${widget.incident!.ineNombre}'),
-                                infoContainer(
-                                    Icons.error_outline,
-                                    'Masivo:',
-                                    widget.incident!.incMasivo == 1
-                                        ? 'Si'
-                                        : 'No'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                infoContainer(Icons.message, 'Detalles:', ''),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: NeumorphicButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ChangesHistory(
-                                                    incidentId: widget.incident!
-                                                        .idIncidencia!,
-                                                  )));
-                                    },
-                                    tooltip: 'Historial de cambios',
-                                    style: NeumorphicStyle(
-                                        color: _colors.contextColor(context),
-                                        shape: NeumorphicShape.flat,
-                                        boxShape:
-                                            const NeumorphicBoxShape.rect(),
-                                        shadowLightColor:
-                                            _colors.shadowColor(context),
-                                        depth: 0.3,
-                                        intensity: 0.7),
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.refresh,
-                                          color: _colors.iconsColor(context),
-                                          size: 20,
-                                        ),
-                                        const Text(
-                                          ' Historial de cambios',
-                                          style: TextStyle(fontSize: 12),
-                                        )
-                                      ],
-                                    ),
+                          ),
+                          infoContainer(Icons.location_city, 'Tipo de falla:',
+                              widget.incident!.tpfNombre!),
+                          infoContainer(Icons.location_city, 'Ciudad:',
+                              widget.incident!.ciuNombre!),
+                          infoContainer(
+                              Icons.date_range, 'Registrado:', _ultimaFecha),
+                          infoContainer(Icons.support_agent, 'Registra:',
+                              '${widget.incident!.usuNombre} ${widget.incident!.usuApellidos}'),
+                          infoContainer(
+                              Icons.supervised_user_circle_outlined,
+                              'Usuarios en operación:',
+                              widget.incident!.incUsuariosOperacion
+                                  .toString()),
+                          infoContainer(
+                              Icons.help_outline_outlined,
+                              'Usuarios afectados:',
+                              widget.incident!.incUsuariosAfectados
+                                  .toString()),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              infoContainer(Icons.circle, 'Estado:',
+                                  '${widget.incident!.ineNombre}'),
+                              infoContainer(
+                                  Icons.error_outline,
+                                  'Masivo:',
+                                  widget.incident!.incMasivo == 1
+                                      ? 'Si'
+                                      : 'No'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              infoContainer(Icons.message, 'Detalles:', ''),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChangesHistory(
+                                                  incidentId: widget.incident!
+                                                      .idIncidencia!,
+                                                )));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.refresh,
+                                        color: _colors.iconsColor(context),
+                                        size: 20,
+                                      ),
+                                      const Text(
+                                        ' Historial de cambios',
+                                        style: TextStyle(fontSize: 12),
+                                      )
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: AutoSizeText(
-                                '${widget.incident!.incObservacion}',
-                                textAlign: TextAlign.justify,
-                                minFontSize: 4,
-                                style: const TextStyle(fontSize: 12),
                               ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: AutoSizeText(
+                              '${widget.incident!.incObservacion}',
+                              textAlign: TextAlign.justify,
+                              minFontSize: 4,
+                              style: const TextStyle(fontSize: 12),
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    Visibility(
-                      visible: prefs.userRolId != '4',
-                      child: SizedBox(
-                        child: Column(
-                          children: [
-                            Visibility(
-                              visible: _selectedStatus == 1,
-                              child: FormBuilderTextField(
-                                controller: _affectedUsersController,
-                                name: 'afecttedusers',
-                                keyboardType: TextInputType.number,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(
-                                      errorText:
-                                          'Cantidad de usuarios afeactos requerida'),
-                                  FormBuilderValidators.max(
-                                      widget.incident!.incUsuariosOperacion!,
-                                      inclusive: true,
-                                      errorText:
-                                          'La cantidad de usuarios afectados es mayor a la de usuarios')
-                                ]),
-                                decoration: InputDecoration(
-                                    labelText: 'Usuarios afectados',
-                                    prefixIcon: Icon(
-                                      Icons.supervised_user_circle_outlined,
-                                      color: _colors.iconsColor(context),
-                                      size: 18,
-                                    )),
-                                onChanged: (value) {
-                                  if (value != '') {
-                                    _affected = int.parse(value!);
-                                    print(_affected);
-                                  }
-                                },
-                              ),
-                            ),
-                            FutureBuilder<List<ServiceStatus>>(
-                                future: apiService.getServiceStatus(),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<List<ServiceStatus>>
-                                        snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                        child: CircularProgressIndicator());
-                                  } else {
-                                    return FormBuilderDropdown<ServiceStatus>(
-                                      name: 'actualStatus',
-                                      //initialValue: snapshot.data!.last,
-                                      decoration: const InputDecoration(
-                                          labelText:
-                                              'Actualizar estado actual a'),
-                                      hint: const Text(
-                                          'Seleccionar nuevo estado actual'),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(
-                                            errorText:
-                                                'Estado actual requerido')
-                                      ]),
-                                      items: snapshot.data!
-                                          .map((serviceStatus) =>
-                                              DropdownMenuItem<ServiceStatus>(
-                                                  value: serviceStatus,
-                                                  child: Text(
-                                                      serviceStatus.nombre!)))
-                                          .toList(),
-                                      onChanged: (serviceStatus) {
-                                        _selectedStatus = serviceStatus!.id;
-                                        print(_selectedStatus);
-                                      },
-                                    );
-                                  }
-                                }),
-                            Container(
-                              padding: const EdgeInsets.all(15),
-                              child: Text(
-                                'Notas adicionales: ',
-                                style: TextStyle(
-                                    color: _colors.textColor(context),
-                                    fontSize: 14),
-                              ),
-                            ),
-                            FormBuilderTextField(
-                                name: 'notes',
-                                controller: _notesController,
-                                maxLines: 5,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(
-                                      errorText:
-                                          'Se requiere una descripción de la actualización')
-                                ]),
-                                textCapitalization:
-                                    TextCapitalization.sentences,
-                                decoration: InputDecoration(
-                                  counterText:
-                                      '${_notesController.text.split(' ').length} palabra(s)',
-                                  labelText:
-                                      'Nota de actualización (Obligatorio)',
-                                  hintText: ('Obligatorio...'),
-                                  border: const OutlineInputBorder(),
-                                  hoverColor: _colors.iconsColor(context),
-                                ),
-                                onChanged: (value) =>
-                                    setState(() => _notes = value!)),
-                            FormBuilderCheckbox(
-                              name: 'ensure',
-                              activeColor: _colors.iconsColor(context),
-                              title: const Text(
-                                  "Toda la información ingresada es válida"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  Visibility(
+                    visible: prefs.userRolId != '4',
+                    child: SizedBox(
+                      child: Column(
+                        children: [
+                          Visibility(
+                            visible: _selectedStatus == 1,
+                            child: FormBuilderTextField(
+                              controller: _affectedUsersController,
+                              name: 'afecttedusers',
+                              keyboardType: TextInputType.number,
+                              autovalidateMode:
+                              AutovalidateMode.onUserInteraction,
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
                                     errorText:
-                                        "Debe certificar que toda la información ingresada es válida")
+                                    'Cantidad de usuarios afeactos requerida'),
+                                FormBuilderValidators.max(
+                                    widget.incident!.incUsuariosOperacion!,
+                                    inclusive: true,
+                                    errorText:
+                                    'La cantidad de usuarios afectados es mayor a la de usuarios')
                               ]),
+                              decoration: InputDecoration(
+                                  labelText: 'Usuarios afectados',
+                                  prefixIcon: Icon(
+                                    Icons.supervised_user_circle_outlined,
+                                    color: _colors.iconsColor(context),
+                                    size: 18,
+                                  )),
+                              onChanged: (value) {
+                                if (value != '') {
+                                  _affected = int.parse(value!);
+                                }
+                              },
                             ),
-                          ],
-                        ),
+                          ),
+                          FutureBuilder<List<ServiceStatus>>(
+                              future: apiService.getServiceStatus(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<ServiceStatus>>
+                                  snapshot) {
+                                if (!snapshot.hasData) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                } else {
+                                  return FormBuilderDropdown<ServiceStatus>(
+                                    name: 'actualStatus',
+                                    //initialValue: snapshot.data!.last,
+                                    decoration: const InputDecoration(
+                                        labelText:
+                                        'Actualizar estado actual a'),
+                                    hint: const Text(
+                                        'Seleccionar nuevo estado actual'),
+                                    autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                    validator: FormBuilderValidators.compose([
+                                      FormBuilderValidators.required(
+                                          errorText:
+                                          'Estado actual requerido')
+                                    ]),
+                                    items: snapshot.data!
+                                        .map((serviceStatus) =>
+                                        DropdownMenuItem<ServiceStatus>(
+                                            value: serviceStatus,
+                                            child: Text(
+                                                serviceStatus.nombre!)))
+                                        .toList(),
+                                    onChanged: (serviceStatus) {
+                                      _selectedStatus = serviceStatus!.id;
+                                    },
+                                  );
+                                }
+                              }),
+                          Container(
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              'Notas adicionales: ',
+                              style: TextStyle(
+                                  color: _colors.textColor(context),
+                                  fontSize: 14),
+                            ),
+                          ),
+                          FormBuilderTextField(
+                              name: 'notes',
+                              controller: _notesController,
+                              maxLines: 5,
+                              autovalidateMode:
+                              AutovalidateMode.onUserInteraction,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText:
+                                    'Se requiere una descripción de la actualización')
+                              ]),
+                              textCapitalization:
+                              TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                counterText:
+                                '${_notesController.text.split(' ').length} palabra(s)',
+                                labelText:
+                                'Nota de actualización (Obligatorio)',
+                                hintText: ('Obligatorio...'),
+                                border: const OutlineInputBorder(),
+                                hoverColor: _colors.iconsColor(context),
+                              ),
+                              onChanged: (value) =>
+                                  setState(() => _notes = value!)),
+                          FormBuilderCheckbox(
+                            name: 'ensure',
+                            activeColor: _colors.iconsColor(context),
+                            title: const Text(
+                                "Toda la información ingresada es válida"),
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText:
+                                  "Debe certificar que toda la información ingresada es válida")
+                            ]),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              key: keyCancel,
+              tooltip: 'Cancelar',
+              backgroundColor: _colors.contextColor(context),
+              child: Container(
+                margin: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.cancel,
+                  color: _colors.iconsColor(context),
+                  size: 30,
                 ),
               ),
-            ]),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              NeumorphicFloatingActionButton(
-                key: keyCancel,
-                style: NeumorphicStyle(
-                    color: _colors.contextColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 2,
-                    intensity: 1),
-                tooltip: 'Cancelar',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            Visibility(
+              visible: prefs.userRolId != '4',
+              child: FloatingActionButton(
+                key: keySave,
+                tooltip: 'Enviar actualización',
+                backgroundColor: _colors.contextColor(context),
                 child: Container(
                   margin: const EdgeInsets.all(2),
                   child: Icon(
-                    Icons.cancel,
+                    Icons.system_update_alt,
                     color: _colors.iconsColor(context),
                     size: 30,
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  saveAndValidate();
                 },
               ),
-              Visibility(
-                visible: prefs.userRolId != '4',
-                child: NeumorphicFloatingActionButton(
-                  key: keySave,
-                  style: NeumorphicStyle(
-                      color: _colors.contextColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 1),
-                  tooltip: 'Enviar actualización',
-                  child: Container(
-                    margin: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.system_update_alt,
-                      color: _colors.iconsColor(context),
-                      size: 30,
-                    ),
-                  ),
-                  onPressed: () {
-                    saveAndValidate();
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -791,17 +732,10 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
       margin: const EdgeInsets.only(top: 10.0),
       child: Row(
         children: <Widget>[
-          NeumorphicIcon(
+          Icon(
             icon,
+            color: _colors.iconsColor(context),
             size: 18,
-            style: NeumorphicStyle(
-                color: _colors.iconsColor(context),
-                shape: NeumorphicShape.flat,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                shadowLightColor: _colors.shadowColor(context),
-                depth: 1.5,
-                intensity: 0.7),
           ),
           Text(
             ' $label',
@@ -831,10 +765,6 @@ class DetailsPageState extends State<IncidentDetailsUpdate> {
       _updateIncident!.idEstado = _selectedStatus;
       _updateIncident!.usuariosAfectados = _affected;
       _updateIncident!.descripcion = _notes;
-
-      print(_updateIncident!.idEstado);
-      print(_updateIncident!.usuariosAfectados);
-      print(_updateIncident!.descripcion);
 
       apiService
           .updateIncident(_updateIncident!, widget.incident!.idIncidencia!)

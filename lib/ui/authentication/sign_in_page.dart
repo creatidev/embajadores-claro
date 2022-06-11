@@ -9,24 +9,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
-
   @override
-  SignInPageState createState() => SignInPageState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class SignInPageState extends State<SignInPage> {
+class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormFieldState<String>> _passwordFieldKey =
-      GlobalKey<FormFieldState<String>>();
+  GlobalKey<FormFieldState<String>>();
   final Uri _url = Uri.parse(dotenv.get('URL_PASS'));
   final Uri _register = Uri.parse(dotenv.get('URL_REG'));
+
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -114,78 +112,71 @@ class SignInPageState extends State<SignInPage> {
         children: <Widget>[
           Expanded(
               child: Column(
-            children: <Widget>[
-              FormBuilder(
-                  key: _formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        FormBuilderTextField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _emailController,
-                          name: "emailphone",
-                          onSaved: (input) => _emailPhone = input,
-                          decoration: InputDecoration(
-                              errorText: _errorText,
-                              prefixIcon: const Icon(Icons.alternate_email,
-                                  color: Colors.deepPurpleAccent, size: 18),
-                              labelText: "Cédula o correo electrónico"),
-                          validator: (value) {
-                            var isEmailValid = _validateEmail(value!);
-                            if (_validateEmail(value) == false &&
-                                _validateId(value) == false) {
-                              return 'Ingrese una cédula o correo electrónico válido.';
-                            }
-                            return null;
-                          },
-                        ),
-                        PasswordField(
-                          fieldKey: _passwordFieldKey,
-                          controller: _passController,
-                          onSaved: (input) => _password = input!,
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(
-                                errorText: "Por favor ingrese una contraseña"),
-                          ]),
-                          labelText: 'Contraseña',
-                          onFieldChange: (value) {
-                            _password = value;
-                          },
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            launchUrl(_url);
-                          },
-                          child: Container(
-                            //color: Colors.deepPurple,
-                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                            child: NeumorphicText(
-                              "¿Olvidó su contraseña?",
-                              style: NeumorphicStyle(
-                                color: _colors.textColor(context),
-                                intensity: 0.7,
-                                depth: 1,
-                                shadowLightColor:
-                                    _colors.shadowTextColor(context),
-                              ),
-                              textStyle: NeumorphicTextStyle(
-                                fontSize: 14,
+                children: <Widget>[
+                  FormBuilder(
+                      key: _formKey,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FormBuilderTextField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              controller: _emailController,
+                              name: "emailphone",
+                              onSaved: (input) => _emailPhone = input,
+                              decoration: InputDecoration(
+                                  errorText: _errorText,
+                                  prefixIcon: const Icon(Icons.alternate_email,
+                                      color: Colors.deepPurpleAccent, size: 18),
+                                  labelText: "Cédula o correo electrónico"),
+                              validator: (value) {
+                                if (_validateEmail(value!) == false &&
+                                    _validateId(value) == false) {
+                                  return 'Ingrese una cédula o correo electrónico válido.';
+                                }
+                                return null;
+                              },
+                            ),
+                            PasswordField(
+                              fieldKey: _passwordFieldKey,
+                              controller: _passController,
+                              onSaved: (input) => _password = input!,
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText: "Por favor ingrese una contraseña"),
+                              ]),
+                              labelText: 'Contraseña',
+                              onFieldChange: (value) {
+                                _password = value;
+                              },
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                launchUrl(_url);
+                              },
+                              child: Container(
+                                //color: Colors.deepPurple,
+                                padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                child: Text(
+                                  "¿Olvidó su contraseña?",
+                                  style: TextStyle(
+                                      color: _colors.textColor(context),
+                                      fontSize: 14
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
-            ],
-          ))
+                      )),
+                ],
+              ))
         ],
       ),
     );
@@ -208,11 +199,11 @@ class SignInPageState extends State<SignInPage> {
       width: 200,
       height: 112,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        //crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          NeumorphicButton(
+          TextButton(
             onPressed: () {
               APIService apiService = APIService();
               final prefs = UserPreferences();
@@ -223,9 +214,11 @@ class SignInPageState extends State<SignInPage> {
                 );
                 apiService.login(_emailPhone!, _password!).then((value) {
                   setState(() {
+                    print(value.message);
                     EasyLoading.dismiss();
                   });
                   if (value.status == true) {
+                    print(value.status);
                     if (value.data!.estado == 1) {
                       if (value.data!.idRol! > 1) {
                         prefs.userId = value.data!.id.toString();
@@ -266,39 +259,19 @@ class SignInPageState extends State<SignInPage> {
                 });
               }
             },
-            tooltip: 'Iniciar sesión',
-            style: NeumorphicStyle(
-                color: _colors.iconsColor(context),
-                shape: NeumorphicShape.flat,
-                boxShape: const NeumorphicBoxShape.rect(),
-                shadowLightColor: _colors.iconsColor(context),
-                depth: 1,
-                intensity: 1),
-            //padding: const EdgeInsets.all(7.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                NeumorphicText(
+              children: const <Widget>[
+                Text(
                   'Iniciar sesión ',
-                  style: NeumorphicStyle(
-                    color: _colors.textButtonColor(context),
-                    intensity: 0.7,
-                    depth: 1,
-                    shadowLightColor: _colors.shadowTextColor(context),
-                  ),
-                  textStyle: NeumorphicTextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                   ),
                 ),
-                NeumorphicIcon(
+                Icon(
                   Icons.login,
                   size: 18,
-                  style: NeumorphicStyle(
-                      color: _colors.textButtonColor(context),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 0.9),
                 ),
               ],
             ),
@@ -310,15 +283,9 @@ class SignInPageState extends State<SignInPage> {
             child: Container(
               //color: Colors.deepPurple,
               padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-              child: NeumorphicText(
+              child: const Text(
                 'Registrar cuenta',
-                style: NeumorphicStyle(
-                  color: _colors.iconsInvertColor(context),
-                  intensity: 0.7,
-                  depth: 1,
-                  shadowLightColor: _colors.shadowTextColor(context),
-                ),
-                textStyle: NeumorphicTextStyle(
+                style: TextStyle(
                   fontSize: 14,
                 ),
               ),
@@ -342,16 +309,16 @@ Widget widgetFooter(Color texcolor) {
 }
 
 bool? _validateId(String value) {
-  print(value);
   if (value.isEmpty) return false;
   final RegExp idExp = RegExp(r"^[0-9]+$");
   if (idExp.hasMatch(value)) return true;
+  return null;
 }
 
 bool? _validateEmail(String value) {
-  print(value);
   if (value.isEmpty) return false;
   final RegExp emailExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   if (emailExp.hasMatch(value)) return true;
+  return null;
 }

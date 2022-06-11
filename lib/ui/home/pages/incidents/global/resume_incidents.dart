@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:embajadores/data/controllers/formhelper.dart';
 import 'package:embajadores/data/models/incidents.dart';
@@ -7,7 +5,6 @@ import 'package:embajadores/ui/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:darq/darq.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class Resume extends StatefulWidget {
@@ -20,6 +17,7 @@ class Resume extends StatefulWidget {
 }
 
 class _ResumeState extends State<Resume> {
+  final CustomColors _colors = CustomColors();
   List<TargetFocus> targets = [];
   var keyCancel = GlobalKey();
   var keyHelp = GlobalKey();
@@ -43,7 +41,6 @@ class _ResumeState extends State<Resume> {
         // pulseAnimationDuration: Duration(milliseconds: 500),
         // pulseVariation: Tween(begin: 1.0, end: 0.99),
         onFinish: () {}, onClickTarget: (target) {
-      print(target);
     }, onSkip: () {
       EasyLoading.showInfo('Tutorial omitido por el usuario.',
           maskType: EasyLoadingMaskType.custom,
@@ -147,192 +144,139 @@ class _ResumeState extends State<Resume> {
       print('Usuarios afectados: ${element.affectedUsers}');
     }
 
-    return NeumorphicTheme(
-      theme: NeumorphicThemeData(
-        lightSource: LightSource.topLeft,
-        accentColor: NeumorphicColors.accent,
-        appBarTheme: NeumorphicAppBarThemeData(
-            buttonStyle: NeumorphicStyle(
-              color: colors.iconsColor(context),
-              shadowLightColor: colors.iconsColor(context),
-              boxShape: const NeumorphicBoxShape.circle(),
-              shape: NeumorphicShape.flat,
-              depth: 2,
-              intensity: 0.9,
-            ),
-            textStyle:
-                TextStyle(color: colors.textColor(context), fontSize: 12),
-            iconTheme:
-                IconThemeData(color: colors.textColor(context), size: 25)),
-        depth: 1,
-        intensity: 5,
-      ),
-      child: Scaffold(
-        appBar: NeumorphicAppBar(
-          leading: Container(
-            padding: const EdgeInsets.all(5),
-            child: NeumorphicIcon(
-              Icons.table_chart_outlined,
-              size: 50,
-              style: NeumorphicStyle(
-                  color: colors.iconsColor(context),
-                  shape: NeumorphicShape.flat,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                  shadowLightColor: colors.shadowColor(context),
-                  depth: 1.5,
-                  intensity: 0.7),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: _colors.contextColor(context),
+        foregroundColor: _colors.iconsColor(context),
+        leading: Container(
+          padding: const EdgeInsets.all(5),
+          child: Icon(
+            Icons.table_chart_outlined,
+            color: colors.iconsColor(context),
+            size: 50,
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              NeumorphicText(
-                'Resumen',
-                //key: keyWelcome,
-                style: NeumorphicStyle(
-                  color: colors.iconsColor(context),
-                  intensity: 0.7,
-                  depth: 1.5,
-                  shadowLightColor: colors.shadowColor(context),
-                ),
-                textStyle: NeumorphicTextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                FormHelper.showMessage(
-                  context,
-                  "Embajadores",
-                  "¿Ver tutorial de la sección?",
-                  "Si",
-                  () {
-                    setTutorial();
-                    showTutorial();
-                    Navigator.of(context).pop();
-                  },
-                  buttonText2: "No",
-                  isConfirmationDialog: true,
-                  onPressed2: () {
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: NeumorphicIcon(
-                  Icons.help_outline,
-                  key: keyHelp,
-                  size: 40,
-                  style: NeumorphicStyle(
-                      color: colors.iconsColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: colors.shadowColor(context),
-                      depth: 1.5,
-                      intensity: 0.7),
-                ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Resumen',
+              //key: keyWelcome,
+              style: TextStyle(
+                color: colors.iconsColor(context),
+                fontSize: 18,
               ),
             ),
           ],
         ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            physics: const ScrollPhysics(),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              FormHelper.showMessage(
+                context,
+                "Embajadores",
+                "¿Ver tutorial de la sección?",
+                "Si",
+                    () {
+                  setTutorial();
+                  showTutorial();
+                  Navigator.of(context).pop();
+                },
+                buttonText2: "No",
+                isConfirmationDialog: true,
+                onPressed2: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
             child: Container(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 100),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 30,
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(5.0),
-                    child: Center(
-                      child: Text(widget.title!,
-                          style: const TextStyle(color: Colors.orange)),
-                    ),
-                  ),
-                  Wrap(
-                    children: <Widget>[
-                      ListView.builder(
-                          controller: scrollController,
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: resumeData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return _resumeCard(
-                                context, resumeData, index, colors);
-                          }),
-                    ],
-                  ),
-                ],
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                Icons.help_outline,
+                color: colors.iconsColor(context),
+                key: keyHelp,
+                size: 40,
               ),
             ),
           ),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 100),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 30,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(5.0),
+                  child: Center(
+                    child: Text(widget.title!,
+                        style: const TextStyle(color: Colors.orange)),
+                  ),
+                ),
+                Wrap(
+                  children: <Widget>[
+                    ListView.builder(
+                        controller: scrollController,
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: resumeData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return _resumeCard(
+                              context, resumeData, index, colors);
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              NeumorphicFloatingActionButton(
-                key: keyCancel,
-                style: NeumorphicStyle(
-                    color: colors.contextColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: colors.shadowColor(context),
-                    depth: 2,
-                    intensity: 1),
-                tooltip: 'Cancelar',
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              key: keyCancel,
+              backgroundColor: colors.contextColor(context),
+              tooltip: 'Cancelar',
+              child: Container(
+                margin: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.cancel,
+                  color: colors.iconsColor(context),
+                  size: 30,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            Visibility(
+              visible: false,
+              child: FloatingActionButton(
+                backgroundColor: colors.contextColor(context),
+                tooltip: 'Enviar actualización',
                 child: Container(
                   margin: const EdgeInsets.all(2),
                   child: Icon(
-                    Icons.cancel,
+                    Icons.system_update_alt,
                     color: colors.iconsColor(context),
                     size: 30,
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  //saveAndValidate();
                 },
               ),
-              Visibility(
-                visible: false,
-                child: NeumorphicFloatingActionButton(
-                  //key: keySave,
-                  style: NeumorphicStyle(
-                      color: colors.contextColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 1),
-                  tooltip: 'Enviar actualización',
-                  child: Container(
-                    margin: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.system_update_alt,
-                      color: colors.iconsColor(context),
-                      size: 30,
-                    ),
-                  ),
-                  onPressed: () {
-                    //saveAndValidate();
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

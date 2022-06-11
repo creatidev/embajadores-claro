@@ -45,7 +45,6 @@ dependencies:
   flutter_local_notifications: ^9.6.0
   flutter_launcher_icons: ^0.9.3
   flutter_native_splash: ^2.2.3
-  flutter_neumorphic_null_safety: ^3.2.4
   flutter_svg: ^1.1.0
   flutter_toggle_tab: ^1.2.0
   http: ^0.13.4

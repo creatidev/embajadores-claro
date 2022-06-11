@@ -1,6 +1,5 @@
 import 'package:embajadores/data/controllers/formhelper.dart';
 import 'package:embajadores/data/controllers/themenotifier.dart';
-import 'package:embajadores/data/services/api_service.dart';
 import 'package:embajadores/ui/authentication/sign_in_page.dart';
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
@@ -9,7 +8,6 @@ import 'package:embajadores/ui/widgets/passwordfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
@@ -54,29 +52,15 @@ class UserInfoState extends State<UserInfo> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            NeumorphicIcon(
+                            Icon(
                               Icons.dark_mode_outlined,
+                              color: _colors.iconsColor(context),
                               size: 30,
-                              style: NeumorphicStyle(
-                                  color: _colors.iconsColor(context),
-                                  shape: NeumorphicShape.flat,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(10)),
-                                  shadowLightColor:
-                                      _colors.shadowColor(context),
-                                  depth: 1,
-                                  intensity: 0.7),
                             ),
-                            NeumorphicText(
+                            Text(
                               ' Tema oscuro',
-                              style: NeumorphicStyle(
+                              style: TextStyle(
                                 color: _colors.textColor(context),
-                                intensity: 0.7,
-                                depth: 1,
-                                shadowLightColor:
-                                    _colors.shadowTextColor(context),
-                              ),
-                              textStyle: NeumorphicTextStyle(
                                 fontSize: 14,
                               ),
                             ),
@@ -96,42 +80,28 @@ class UserInfoState extends State<UserInfo> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            NeumorphicIcon(
+                            Icon(
                               Icons.touch_app,
+                              color: _colors.iconsColor(context),
                               size: 30,
-                              style: NeumorphicStyle(
-                                  color: _colors.iconsColor(context),
-                                  shape: NeumorphicShape.flat,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(10)),
-                                  shadowLightColor:
-                                      _colors.shadowColor(context),
-                                  depth: 1,
-                                  intensity: 0.7),
                             ),
-                            NeumorphicText(
+                            Text(
                               ' Reiniciar tuturiales',
-                              style: NeumorphicStyle(
+                              style: TextStyle(
                                 color: _colors.textColor(context),
-                                intensity: 0.7,
-                                depth: 1,
-                                shadowLightColor:
-                                    _colors.shadowTextColor(context),
-                              ),
-                              textStyle: NeumorphicTextStyle(
                                 fontSize: 14,
                               ),
                             ),
                           ],
                         ),
-                        NeumorphicButton(
+                        TextButton(
                           onPressed: () {
                             FormHelper.showMessage(
                               context,
                               "Embajadores",
                               "¿Reiniciar tutoriales?",
                               "Si",
-                              () {
+                                  () {
                                 prefs.firstRun = true;
                                 prefs.firstStoreFilter = true;
                                 prefs.firstIncident = true;
@@ -151,15 +121,6 @@ class UserInfoState extends State<UserInfo> {
                               },
                             );
                           },
-                          tooltip: 'Reiniciar tutoriales',
-                          style: NeumorphicStyle(
-                              color: _colors.contextColor(context),
-                              shape: NeumorphicShape.flat,
-                              boxShape: const NeumorphicBoxShape.circle(),
-                              shadowLightColor: _colors.shadowColor(context),
-                              depth: 1,
-                              intensity: 0.7),
-                          padding: const EdgeInsets.all(7.0),
                           child: Icon(
                             Icons.refresh,
                             color: _colors.iconsColor(context),
@@ -172,28 +133,15 @@ class UserInfoState extends State<UserInfo> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        NeumorphicIcon(
+                        Icon(
                           Icons.account_box_outlined,
+                          color: _colors.iconsColor(context),
                           size: 30,
-                          style: NeumorphicStyle(
-                              color: _colors.textColor(context),
-                              shape: NeumorphicShape.flat,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(10)),
-                              shadowLightColor:
-                                  _colors.shadowTextColor(context),
-                              depth: 1,
-                              intensity: 0.7),
                         ),
-                        NeumorphicText(
+                        Text(
                           ' Mi cuenta',
-                          style: NeumorphicStyle(
+                          style: TextStyle(
                             color: _colors.textColor(context),
-                            intensity: 0.7,
-                            depth: 1,
-                            shadowLightColor: _colors.shadowTextColor(context),
-                          ),
-                          textStyle: NeumorphicTextStyle(
                             fontSize: 14,
                           ),
                         ),
@@ -203,41 +151,21 @@ class UserInfoState extends State<UserInfo> {
                     Visibility(
                       visible: false,
                       child: ListTile(
-                        leading: NeumorphicIcon(
+                        leading: Icon(
                           Icons.lock_outline,
+                          color: _colors.iconsColor(context),
                           size: 30,
-                          style: NeumorphicStyle(
-                              color: _colors.iconsColor(context),
-                              shape: NeumorphicShape.flat,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(10)),
-                              shadowLightColor: _colors.shadowColor(context),
-                              depth: 1,
-                              intensity: 0.7),
                         ),
-                        title: NeumorphicText(
+                        title: Text(
                           ' Cambiar contraseña',
-                          style: NeumorphicStyle(
+                          style: TextStyle(
                             color: _colors.textColor(context),
-                            intensity: 0.7,
-                            depth: 1,
-                            shadowLightColor: _colors.shadowTextColor(context),
-                          ),
-                          textStyle: NeumorphicTextStyle(
                             fontSize: 14,
                           ),
                         ),
-                        trailing: NeumorphicIcon(
+                        trailing: const Icon(
                           Icons.keyboard_arrow_right,
                           size: 30,
-                          style: NeumorphicStyle(
-                              color: _colors.iconsColor(context),
-                              shape: NeumorphicShape.flat,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(10)),
-                              shadowLightColor: _colors.shadowColor(context),
-                              depth: 1,
-                              intensity: 0.7),
                         ),
                         onTap: () {
                           _changePasswordInputDialog(context);
@@ -246,41 +174,27 @@ class UserInfoState extends State<UserInfo> {
                     ),
                     const Divider(),
                     ListTile(
-                      leading: NeumorphicIcon(
+                      leading: Icon(
                         Icons.logout,
+                        color: _colors.iconsColor(context),
                         size: 30,
-                        style: NeumorphicStyle(
-                            color: _colors.iconsColor(context),
-                            shape: NeumorphicShape.flat,
-                            boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.circular(10)),
-                            shadowLightColor: _colors.shadowColor(context),
-                            depth: 1,
-                            intensity: 0.7),
                       ),
-                      title: NeumorphicText(
-                        ' Cerrar sesión',
-                        style: NeumorphicStyle(
-                          color: _colors.textColor(context),
-                          intensity: 0.7,
-                          depth: 1,
-                          shadowLightColor: _colors.shadowTextColor(context),
-                        ),
-                        textStyle: NeumorphicTextStyle(
-                          fontSize: 14,
-                        ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            ' Cerrar sesión',
+                            style: TextStyle(
+                              color: _colors.textColor(context),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
-                      trailing: NeumorphicIcon(
+                      trailing: Icon(
                         Icons.keyboard_arrow_right,
+                        color: _colors.iconsColor(context),
                         size: 30,
-                        style: NeumorphicStyle(
-                            color: _colors.iconsColor(context),
-                            shape: NeumorphicShape.flat,
-                            boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.circular(10)),
-                            shadowLightColor: _colors.shadowColor(context),
-                            depth: 1,
-                            intensity: 0.7),
                       ),
                       onTap: () {
                         FormHelper.showMessage(
@@ -288,7 +202,7 @@ class UserInfoState extends State<UserInfo> {
                           "Embajadores",
                           "¿Cerrar sesión?",
                           "Si",
-                          () async {
+                              () async {
                             final prefs = UserPreferences();
                             prefs.removeValues();
                             await Future.delayed(const Duration(seconds: 2));
@@ -297,7 +211,7 @@ class UserInfoState extends State<UserInfo> {
                                   builder: (BuildContext context) =>
                                       SignInPage(),
                                 ),
-                                (route) => false);
+                                    (route) => false);
                           },
                           buttonText2: "No",
                           isConfirmationDialog: true,
@@ -344,7 +258,8 @@ class UserInfoState extends State<UserInfo> {
                             errorText: 'Debe contener al menos una mayúscula.'),
                         FormBuilderValidators.match(r'^(?=.*?[0-9])',
                             errorText: 'Debe contener al menos un digito.'),
-                        FormBuilderValidators.match(r'^(?=.*?[#?!@$%^&*-])',
+                        FormBuilderValidators.match(
+                            r'^(?=.*?[#?!@$%^&*-])',
                             errorText: '..al menos un caracter especial.')
                       ]),
                       labelText: 'Contraseña',

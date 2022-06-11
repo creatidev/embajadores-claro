@@ -1,4 +1,4 @@
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:package_info/package_info.dart';
@@ -51,27 +51,17 @@ class AboutPageState extends State<AboutPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  NeumorphicText(
+                  Text(
                     _packageInfo.appName,
-                    style: NeumorphicStyle(
+                    style: TextStyle(
                       color: _colors.textColor(context),
-                      intensity: 0.7,
-                      depth: 1,
-                      shadowLightColor: _colors.shadowTextColor(context),
-                    ),
-                    textStyle: NeumorphicTextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  NeumorphicText(
+                  Text(
                     'Versión ${_packageInfo.version}',
-                    style: NeumorphicStyle(
+                    style: TextStyle(
                       color: _colors.textColor(context),
-                      intensity: 0.7,
-                      depth: 1,
-                      shadowLightColor: _colors.shadowTextColor(context),
-                    ),
-                    textStyle: NeumorphicTextStyle(
                       fontSize: 14,
                     ),
                   ),
@@ -84,15 +74,10 @@ class AboutPageState extends State<AboutPage> {
                         size: 14,
                         color: Colors.orange,
                       ),
-                      NeumorphicText(
+                      Text(
                         dotenv.get('NAME'),
-                        style: NeumorphicStyle(
+                        style: TextStyle(
                           color: _colors.textColor(context),
-                          intensity: 0.7,
-                          depth: 1,
-                          shadowLightColor: _colors.shadowTextColor(context),
-                        ),
-                        textStyle: NeumorphicTextStyle(
                           fontSize: 14,
                         ),
                       ),

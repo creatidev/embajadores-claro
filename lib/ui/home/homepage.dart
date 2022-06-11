@@ -4,14 +4,13 @@ import 'package:embajadores/ui/home/pages/incidents/global/incident_query.dart';
 import 'package:embajadores/ui/home/pages/incidents/global/all_incidents.dart';
 import 'package:embajadores/ui/home/pages/incidents/local/my_incidents.dart';
 import 'package:embajadores/ui/home/pages/stores/global/global_stores.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:embajadores/ui/home/pages/stores/register_store.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:embajadores/data/controllers/themenotifier.dart';
 import 'package:embajadores/ui/authentication/sign_in_page.dart';
 import 'package:embajadores/ui/home/pages/stores/my_stores.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:embajadores/data/controllers/formhelper.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:embajadores/ui/home/userinfo.dart';
@@ -27,16 +26,13 @@ class HomePage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _advancedDrawerController = AdvancedDrawerController();
   final WeSlideController _weSlideController = WeSlideController();
-  final _newPasswordController = TextEditingController();
-
-  final _formKey = GlobalKey<FormBuilderState>();
   final CustomColors _colors = CustomColors();
   List<Widget> buttons = <Widget>[];
   List<Widget> pages = <Widget>[];
@@ -92,12 +88,11 @@ class _HomePageState extends State<HomePage> {
         // pulseAnimationDuration: Duration(milliseconds: 500),
         // pulseVariation: Tween(begin: 1.0, end: 0.99),
         onFinish: () {}, onClickTarget: (target) {
-      print(target);
-    }, onSkip: () {
-      EasyLoading.showInfo('Tutorial omitido por el usuario.',
-          maskType: EasyLoadingMaskType.custom,
-          duration: const Duration(milliseconds: 1000));
-    })
+        }, onSkip: () {
+          EasyLoading.showInfo('Tutorial omitido por el usuario.',
+              maskType: EasyLoadingMaskType.custom,
+              duration: const Duration(milliseconds: 1000));
+        })
       ..show();
     // tutorial.skip();
     // tutorial.finish();
@@ -224,17 +219,17 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "A continuación, se mostrará el tutorial del uso de la aplicación Embajadores, que describirá a detalle como se debe utilizar esta aplicación. Se recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
+                                "A continuación, se mostrará el tutorial del uso de la aplicación Embajadores, que describirá a detalle como se debe utilizar esta aplicación. Se recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.help_outline,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.help_outline,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
+                                " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
                               ),
                             ],
                           ),
@@ -288,226 +283,193 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               WidgetSpan(
                                   child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  mainAxisAlignment:
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 40,
-                                      height: 50,
-                                      child: Column(
-                                        mainAxisAlignment:
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 40,
+                                          height: 50,
+                                          child: Column(
+                                            mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          NeumorphicIcon(
-                                            Icons.store,
-                                            size: 40,
-                                            style: NeumorphicStyle(
+                                            children: const <Widget>[
+                                              Icon(
+                                                Icons.store,
                                                 color: Colors.green,
-                                                shape: NeumorphicShape.flat,
-                                                boxShape: NeumorphicBoxShape
-                                                    .roundRect(
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                shadowLightColor:
-                                                    Colors.greenAccent,
-                                                depth: 1,
-                                                intensity: 0.7),
-                                          ),
-                                          const Text(
-                                            'Abierta',
-                                            style: TextStyle(fontSize: 8),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Row(
-                                            children: const <Widget>[
-                                              Icon(
-                                                Icons.label,
-                                                size: 14,
-                                                color: Colors.cyanAccent,
+                                                size: 40,
                                               ),
-                                              Text('Nombre de la tienda')
+                                              Text(
+                                                'Abierta',
+                                                style: TextStyle(fontSize: 8),
+                                              )
                                             ],
                                           ),
-                                          Row(
-                                            children: const <Widget>[
-                                              Icon(
-                                                Icons.location_city,
-                                                size: 14,
-                                                color: Colors.cyanAccent,
-                                              ),
-                                              Text('Ciudad de la tienda')
-                                            ],
-                                          ),
-                                          Row(
-                                            children: const <Widget>[
-                                              Icon(
-                                                Icons.access_time_outlined,
-                                                size: 14,
-                                                color: Colors.cyanAccent,
-                                              ),
-                                              Text('Registrado hace')
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 110,
-                                      height: 40,
-                                      child: Row(
-                                        mainAxisAlignment:
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.label,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text('Nombre de la tienda')
+                                              ],
+                                            ),
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.location_city,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text('Ciudad de la tienda')
+                                              ],
+                                            ),
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.access_time_outlined,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text('Registrado hace')
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 110,
+                                          height: 40,
+                                          child: Row(
+                                            mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          NeumorphicIcon(
-                                            Icons.logout,
-                                            size: 40,
-                                            style: NeumorphicStyle(
+                                            children: const <Widget>[
+                                              Icon(
+                                                Icons.logout,
                                                 color: Colors.red,
-                                                shape: NeumorphicShape.flat,
-                                                boxShape: NeumorphicBoxShape
-                                                    .roundRect(
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                shadowLightColor:
-                                                    Colors.redAccent,
-                                                depth: 1,
-                                                intensity: 0.7),
+                                                size: 40,
+                                              ),
+                                              VerticalDivider(),
+                                              Icon(
+                                                Icons.app_registration,
+                                                color: Colors.cyan,
+                                                size: 40,
+                                              ),
+                                            ],
                                           ),
-                                          const VerticalDivider(),
-                                          NeumorphicIcon(
-                                            Icons.app_registration,
-                                            size: 40,
-                                            style: NeumorphicStyle(
-                                                color:
-                                                    _colors.iconsColor(context),
-                                                shape: NeumorphicShape.flat,
-                                                boxShape: NeumorphicBoxShape
-                                                    .roundRect(
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                shadowLightColor: _colors
-                                                    .shadowColor(context),
-                                                depth: 1,
-                                                intensity: 0.7),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )),
+                                  )),
                               const TextSpan(
                                 text: " \n\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.green,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.green,
+                                  )),
                               const TextSpan(
                                 text: " Tienda abierta\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.red,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.red,
+                                  )),
                               const TextSpan(
                                 text: " Tienda cerrada\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.login,
-                                size: 14,
-                                color: Colors.greenAccent,
-                              )),
+                                    Icons.login,
+                                    size: 14,
+                                    color: Colors.greenAccent,
+                                  )),
                               const TextSpan(
                                 text: " Realizar apertura de la tienda (*)\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.logout,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.logout,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text: " Realizar cierre de la tienda (*)\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.app_registration,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.app_registration,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Registrar incidente en la tienda seleccionada.\n",
+                                " Registrar incidente en la tienda seleccionada.\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.expand_more,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.expand_more,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Expanda para ver detalles adicionales.\n",
+                                " Expanda para ver detalles adicionales.\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.add,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.add,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text: " Registrar tiendas adicionales.\n\n\n",
                               ),
                               const TextSpan(
                                 text:
-                                    "(*) Apertura y cierre de la tienda:\nLas tiendas registradas facilitan el registro de la apertura y cierre y la creación de incidentes relacionados a la misma.\nEl registro se realiza tanto local como en línea, pero las mostradas en esta pantalla corresponden a las registradas de forma local.\n",
+                                "(*) Apertura y cierre de la tienda:\nLas tiendas registradas facilitan el registro de la apertura y cierre y la creación de incidentes relacionados a la misma.\nEl registro se realiza tanto local como en línea, pero las mostradas en esta pantalla corresponden a las registradas de forma local.\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.login,
-                                size: 14,
-                                color: Colors.greenAccent,
-                              )),
+                                    Icons.login,
+                                    size: 14,
+                                    color: Colors.greenAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Al realizar la apertura, la tienda se registra en linéa como tienda en operación. Puede registrar notas de apertura o dejar la nota por defecto.\n",
+                                " Al realizar la apertura, la tienda se registra en linéa como tienda en operación. Puede registrar notas de apertura o dejar la nota por defecto.\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.logout,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.logout,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Al realizar el cierre, la tienda se registra en linéa como tienda cerrada. Puede registrar notas de apertura o dejar la nota por defecto.\n",
+                                " Al realizar el cierre, la tienda se registra en linéa como tienda cerrada. Puede registrar notas de apertura o dejar la nota por defecto.\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.delete,
-                                size: 14,
-                                color: Colors.grey,
-                              )),
+                                    Icons.delete,
+                                    size: 14,
+                                    color: Colors.grey,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Si la tienda se encuentra cerrada, puede eliminar el registro asociado, expandiendo los detalles encontrará el botón de eliminación.",
+                                " Si la tienda se encuentra cerrada, puede eliminar el registro asociado, expandiendo los detalles encontrará el botón de eliminación.",
                               ),
                             ],
                           ),
@@ -562,32 +524,32 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "Muestra el tipo y la cantidad de datos mostrados en pantalla. Presione para desplegar el menú secundario.\n\n\n",
+                                "Muestra el tipo y la cantidad de datos mostrados en pantalla. Presione para desplegar el menú secundario.\n\n\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.warning_amber_rounded,
-                                size: 14,
-                                color: Colors.cyan,
-                              )),
+                                    Icons.warning_amber_rounded,
+                                    size: 14,
+                                    color: Colors.cyan,
+                                  )),
                               TextSpan(
                                 text: " Incidentes\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.cyan,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.cyan,
+                                  )),
                               TextSpan(
                                 text: " Tiendas\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.data_usage,
-                                size: 14,
-                                color: Colors.cyan,
-                              )),
+                                    Icons.data_usage,
+                                    size: 14,
+                                    color: Colors.cyan,
+                                  )),
                               TextSpan(
                                 text: " Reportes",
                               ),
@@ -656,7 +618,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "Presione o deslice desde el borde izquierdo de la pantalla hacía la derecha para mostrar el menú principal.",
+                                "Presione o deslice desde el borde izquierdo de la pantalla hacía la derecha para mostrar el menú principal.",
                               ),
                             ],
                           ),
@@ -673,7 +635,7 @@ class _HomePageState extends State<HomePage> {
         targetPosition: TargetPosition(
             const Size(400, 50), Offset(0.0, _panelMaxSize * 0.95)),
         alignSkip:
-            AlignmentGeometry.lerp(Alignment.topRight, Alignment.center, 0.0),
+        AlignmentGeometry.lerp(Alignment.topRight, Alignment.center, 0.0),
         enableOverlayTab: true,
         contents: [
           TargetContent(
@@ -712,7 +674,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "Mostrará acciones básicas para la cuenta de usuario actual. \nDeslice hacía arriba para visualizar menú.",
+                                "Mostrará acciones básicas para la cuenta de usuario actual. \nDeslice hacía arriba para visualizar menú.",
                               ),
                             ],
                           ),
@@ -758,173 +720,153 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               WidgetSpan(
                                   child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  mainAxisAlignment:
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 40,
-                                      height: 50,
-                                      child: Column(
-                                        mainAxisAlignment:
+                                      children: <Widget>[
+                                        SizedBox(
+                                          width: 40,
+                                          height: 50,
+                                          child: Column(
+                                            mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          NeumorphicIcon(
-                                            Icons.warning_amber_rounded,
-                                            size: 40,
-                                            style: NeumorphicStyle(
-                                                color: Colors.orangeAccent,
-                                                shape: NeumorphicShape.flat,
-                                                boxShape: NeumorphicBoxShape
-                                                    .roundRect(
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                shadowLightColor: Colors.orange,
-                                                depth: 1,
-                                                intensity: 0.7),
+                                            children: const <Widget>[
+                                              Icon(
+                                                Icons.warning_amber_rounded,
+                                                size: 40,
+                                              ),
+                                              Text(
+                                                'En curso',
+                                                style: TextStyle(fontSize: 8),
+                                              )
+                                            ],
                                           ),
-                                          const Text(
-                                            'En curso',
-                                            style: TextStyle(fontSize: 8),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
                                           MainAxisAlignment.start,
-                                      crossAxisAlignment:
+                                          crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.label,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
+                                          children: <Widget>[
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.label,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Servicio afectado')
+                                              ],
                                             ),
-                                            Text(' Servicio afectado')
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.location_city,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Nombre de la tienda')
+                                              ],
+                                            ),
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons
+                                                      .supervised_user_circle_outlined,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Usuarios en operación')
+                                              ],
+                                            ),
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.error,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(' Usuarios afectados')
+                                              ],
+                                            ),
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.access_time_outlined,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Registrado hace')
+                                              ],
+                                            )
                                           ],
                                         ),
                                         Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.location_city,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
-                                            ),
-                                            Text(' Nombre de la tienda')
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons
-                                                  .supervised_user_circle_outlined,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
-                                            ),
-                                            Text(' Usuarios en operación')
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.error,
-                                              size: 14,
-                                              color: Colors.orange,
-                                            ),
-                                            Text(' Usuarios afectados')
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.access_time_outlined,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
-                                            ),
-                                            Text(' Registrado hace')
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
+                                          mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        NeumorphicIcon(
-                                          Icons.app_registration,
-                                          size: 40,
-                                          style: NeumorphicStyle(
-                                              color: Colors.redAccent,
-                                              shape: NeumorphicShape.flat,
-                                              boxShape:
-                                                  NeumorphicBoxShape.roundRect(
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              shadowLightColor: Colors.red,
-                                              depth: 1,
-                                              intensity: 0.7),
+                                          children: const <Widget>[
+                                            Icon(
+                                              Icons.app_registration,
+                                              size: 40,
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              )),
+                                  )),
                               const TextSpan(
                                 text: '\n\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.warning_amber_rounded,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.warning_amber_rounded,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               const TextSpan(
                                 text: ' Incidente en curso\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.warning_amber_rounded,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.warning_amber_rounded,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text: ' Incidente pendiente por información\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.app_registration,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.app_registration,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text: ' Actualizar incidente seleccionado.\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.expand_more,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.expand_more,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    ' Expanda para ver detalles adicionales.\n',
+                                ' Expanda para ver detalles adicionales.\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.notes,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.notes,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text: ' Detalles.\n\n\n',
                               ),
                               const TextSpan(
                                 text:
-                                    "'En esta pantalla solo se mostrarán los incidentes relacionados a su cuenta que se encuentren en estado 'En curso' o 'Pendiente'.\n",
+                                "'En esta pantalla solo se mostrarán los incidentes relacionados a su cuenta que se encuentren en estado 'En curso' o 'Pendiente'.\n",
                               ),
                             ],
                           ),
@@ -982,236 +924,216 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               WidgetSpan(
                                   child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
                                       children: <Widget>[
-                                        SizedBox(
-                                          width: 40,
-                                          height: 50,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: <Widget>[
-                                              NeumorphicIcon(
-                                                Icons.warning_amber_rounded,
-                                                size: 20,
-                                                style: NeumorphicStyle(
-                                                    color: Colors.orangeAccent,
-                                                    shape: NeumorphicShape.flat,
-                                                    boxShape: NeumorphicBoxShape
-                                                        .roundRect(BorderRadius
-                                                            .circular(10)),
-                                                    shadowLightColor:
-                                                        Colors.orange,
-                                                    depth: 1,
-                                                    intensity: 0.7),
-                                              ),
-                                              const Text(
-                                                'En curso',
-                                                style: TextStyle(fontSize: 8),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 220,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Row(
-                                                children: const <Widget>[
-                                                  Icon(
-                                                    Icons.label,
-                                                    size: 14,
-                                                    color: Colors.cyanAccent,
-                                                  ),
-                                                  Text(' Servicio afectado',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ))
-                                                ],
-                                              ),
-                                              Row(
-                                                children: const <Widget>[
-                                                  Icon(
-                                                    Icons.location_city,
-                                                    size: 14,
-                                                    color: Colors.cyanAccent,
-                                                  ),
-                                                  Text(' Nombre de la tienda',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ))
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceBetween,
                                           children: <Widget>[
-                                            NeumorphicIcon(
-                                              Icons.app_registration,
-                                              size: 20,
-                                              style: NeumorphicStyle(
-                                                  color: Colors.redAccent,
-                                                  shape: NeumorphicShape.flat,
-                                                  boxShape: NeumorphicBoxShape
-                                                      .roundRect(
-                                                          BorderRadius.circular(
-                                                              10)),
-                                                  shadowLightColor: Colors.red,
-                                                  depth: 1,
-                                                  intensity: 0.7),
+                                            SizedBox(
+                                              width: 40,
+                                              height: 50,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                                children: const <Widget>[
+                                                  Icon(
+                                                    Icons.warning_amber_rounded,
+                                                    size: 20,
+                                                  ),
+                                                  Text(
+                                                    'En curso',
+                                                    style: TextStyle(fontSize: 8),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 220,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: const <Widget>[
+                                                      Icon(
+                                                        Icons.label,
+                                                        size: 14,
+                                                        color: Colors.cyanAccent,
+                                                      ),
+                                                      Text(' Servicio afectado',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: const <Widget>[
+                                                      Icon(
+                                                        Icons.location_city,
+                                                        size: 14,
+                                                        color: Colors.cyanAccent,
+                                                      ),
+                                                      Text(' Nombre de la tienda',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.app_registration,
+                                                  size: 20,
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: <Widget>[
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.support_agent,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
+                                        Column(
+                                          children: <Widget>[
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.support_agent,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Técnico que registra',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Técnico que registra',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons
-                                                  .supervised_user_circle_outlined,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons
+                                                      .supervised_user_circle_outlined,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Usuarios en operación',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Usuarios en operación',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.error,
-                                              size: 14,
-                                              color: Colors.orange,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.error,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(' Usuarios afectados',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Usuarios afectados',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.access_time_outlined,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.access_time_outlined,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Registrado hace',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Registrado hace',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.notes,
-                                              size: 14,
-                                              color: Colors.cyanAccent,
-                                            ),
-                                            Text(' Detalles',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.notes,
+                                                  size: 14,
+                                                  color: Colors.cyanAccent,
+                                                ),
+                                                Text(' Detalles',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
+                                            )
                                           ],
                                         )
                                       ],
-                                    )
-                                  ],
-                                ),
-                              )),
+                                    ),
+                                  )),
                               const TextSpan(
                                 text: "\n\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.warning_amber_rounded,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.warning_amber_rounded,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               const TextSpan(
                                 text: " Incidente en curso\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.warning_amber_rounded,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.warning_amber_rounded,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text: " Incidente pendiente por información\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.local_fire_department,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.local_fire_department,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               const TextSpan(
                                 text: ' Incidente masivo en curso\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.local_fire_department_sharp,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.local_fire_department_sharp,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    ' Incidente masivo pendiente por información\n',
+                                ' Incidente masivo pendiente por información\n',
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.app_registration,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.app_registration,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Actualizar/visualizar incidente seleccionado\n",
+                                " Actualizar/visualizar incidente seleccionado\n",
                               ),
                               const WidgetSpan(
                                   child: Icon(
-                                Icons.expand_more,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.expand_more,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               const TextSpan(
                                 text:
-                                    " Expanda para ver detalles adicionales\n\n\n",
+                                " Expanda para ver detalles adicionales\n\n\n",
                               ),
                               const TextSpan(
                                 text:
-                                    "En esta pantalla se mostrarán todos los incidentes que se encuentren en estado 'En curso' o 'Pendiente'.\n",
+                                "En esta pantalla se mostrarán todos los incidentes que se encuentren en estado 'En curso' o 'Pendiente'.\n",
                               ),
                             ],
                           ),
@@ -1274,101 +1196,101 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               const TextSpan(
                                 text:
-                                    "Seleccione el filtro deseado y luego oprima en 'Visualizar resumen' para visualizar un informe resumido.\n\n",
+                                "Seleccione el filtro deseado y luego oprima en 'Visualizar resumen' para visualizar un informe resumido.\n\n",
                               ),
                               WidgetSpan(
                                   child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Column(
-                                  children: <Widget>[
-                                    Column(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
                                       children: <Widget>[
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.local_fire_department,
-                                              size: 14,
-                                              color: Colors.orange,
+                                        Column(
+                                          children: <Widget>[
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.local_fire_department,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(
+                                                    ' Filtrar por incidentes masivos',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(
-                                                ' Filtrar por incidentes masivos',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.warning,
-                                              size: 14,
-                                              color: Colors.orange,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.warning,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(
+                                                    ' Filtrar por incidentes en curso',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(
-                                                ' Filtrar por incidentes en curso',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.warning,
-                                              size: 14,
-                                              color: Colors.redAccent,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.warning,
+                                                  size: 14,
+                                                  color: Colors.redAccent,
+                                                ),
+                                                Text(
+                                                    ' Filtrar por incidentes pendientes',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(
-                                                ' Filtrar por incidentes pendientes',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.disabled_by_default,
-                                              size: 14,
-                                              color: Colors.orange,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.disabled_by_default,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(' Excluir incidentes masivos',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Excluir incidentes masivos',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.cleaning_services,
-                                              size: 14,
-                                              color: Colors.orange,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.cleaning_services,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(' Cancelar filtro',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Cancelar filtro',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
-                                          ],
-                                        ),
-                                        Row(
-                                          children: const <Widget>[
-                                            Icon(
-                                              Icons.table_chart_outlined,
-                                              size: 14,
-                                              color: Colors.orange,
+                                            Row(
+                                              children: const <Widget>[
+                                                Icon(
+                                                  Icons.table_chart_outlined,
+                                                  size: 14,
+                                                  color: Colors.orange,
+                                                ),
+                                                Text(' Visualizar resumen',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ))
+                                              ],
                                             ),
-                                            Text(' Visualizar resumen',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ))
                                           ],
-                                        ),
+                                        )
                                       ],
-                                    )
-                                  ],
-                                ),
-                              )),
+                                    ),
+                                  )),
                             ],
                           ),
                         ),
@@ -1427,17 +1349,17 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "A continuación, se mostrará el tutorial de la pantalla tiendas, este módulo le permitirá controlar en tiempo real el estado de las tiendas e incidentes presentados en las mismas.\nSe recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
+                                "A continuación, se mostrará el tutorial de la pantalla tiendas, este módulo le permitirá controlar en tiempo real el estado de las tiendas e incidentes presentados en las mismas.\nSe recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.help_outline,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.help_outline,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
+                                " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
                               ),
                             ],
                           ),
@@ -1498,119 +1420,119 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               WidgetSpan(
                                   child: Icon(
-                                Icons.expand_less,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.expand_less,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Botón de menú principal de monitoreo de tiendas\n",
+                                " Botón de menú principal de monitoreo de tiendas\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.grid_3x3,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.grid_3x3,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Visualice tiendas en 3 columnas\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.grid_4x4,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.grid_4x4,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Visualice tiendas en 4 columnas\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.grid_on,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.grid_on,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Visualice tiendas en 12 columnas (*)\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.grid_off,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.grid_off,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Restablece la vista por defecto\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.cleaning_services_rounded,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.cleaning_services_rounded,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Restablece el filtro por defecto\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.filter_list_alt,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.filter_list_alt,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Filtrar tiendas por datos especificos\n",
+                                " Filtrar tiendas por datos especificos\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.camera_alt,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.camera_alt,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Guarda y comparte captura de la vista actual\n",
+                                " Guarda y comparte captura de la vista actual\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.grey,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.grey,
+                                  )),
                               TextSpan(
                                 text: " Tienda cerrada\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.green,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.green,
+                                  )),
                               TextSpan(
                                 text: " Tienda abierta\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.store,
-                                size: 14,
-                                color: Colors.orange,
-                              )),
+                                    Icons.store,
+                                    size: 14,
+                                    color: Colors.orange,
+                                  )),
                               TextSpan(
                                 text: " Tienda con incidente en curso\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.crop_square,
-                                size: 14,
-                                color: Colors.redAccent,
-                              )),
+                                    Icons.crop_square,
+                                    size: 14,
+                                    color: Colors.redAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Tienda con afectada por incidente masivo\n\n\n",
+                                " Tienda con afectada por incidente masivo\n\n\n",
                               ),
                               TextSpan(
                                 text:
-                                    "(*) Esta opción le permite ver todas las tiendas en una sola vista.\nPara ver información detallada de una tienda especifica, presione sobre el indicador de la tienda. Esto lo llevará a una nueva pantalla.\nEn la parte inferior se mostrará un resumen que se establece según el filtro aplicado, de lo contrario mostrará la información por defecto.",
+                                "(*) Esta opción le permite ver todas las tiendas en una sola vista.\nPara ver información detallada de una tienda especifica, presione sobre el indicador de la tienda. Esto lo llevará a una nueva pantalla.\nEn la parte inferior se mostrará un resumen que se establece según el filtro aplicado, de lo contrario mostrará la información por defecto.",
                               ),
                             ],
                           ),
@@ -1668,17 +1590,17 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               TextSpan(
                                 text:
-                                    "A continuación, se mostrará el tutorial de la pantalla Reportes, este módulo le permitirá descargar los registros realizados en un archivo Excel.\nSe recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
+                                "A continuación, se mostrará el tutorial de la pantalla Reportes, este módulo le permitirá descargar los registros realizados en un archivo Excel.\nSe recomienda leerlo por completo la primera vez, pero puede omitirlo y verlo cuando lo desee tocando en el icono ",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.help_outline,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.help_outline,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
+                                " en la parte superior derecha de la pantalla. Recuerde que los tutoriales se dividen por sección.",
                               ),
                             ],
                           ),
@@ -1732,44 +1654,44 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               WidgetSpan(
                                   child: Icon(
-                                Icons.expand_less,
-                                size: 14,
-                                color: Colors.orangeAccent,
-                              )),
+                                    Icons.expand_less,
+                                    size: 14,
+                                    color: Colors.orangeAccent,
+                                  )),
                               TextSpan(
                                 text: " Botón de menú principal de reportes\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.cleaning_services_rounded,
-                                size: 14,
-                                color: Colors.white,
-                              )),
+                                    Icons.cleaning_services_rounded,
+                                    size: 14,
+                                    color: Colors.white,
+                                  )),
                               TextSpan(
                                 text: " Restablece el filtro por defecto\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.filter_list_alt,
-                                size: 14,
-                                color: Colors.white,
-                              )),
+                                    Icons.filter_list_alt,
+                                    size: 14,
+                                    color: Colors.white,
+                                  )),
                               TextSpan(
                                 text: " Filtrar por datos especificos\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.share,
-                                size: 14,
-                                color: Colors.white,
-                              )),
+                                    Icons.share,
+                                    size: 14,
+                                    color: Colors.white,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Descarga y comparte los datos filtrados (*)\n\n\n",
+                                " Descarga y comparte los datos filtrados (*)\n\n\n",
                               ),
                               TextSpan(
                                 text:
-                                    "(*) Descarga solamente los datos filtrados actualmente, por defecto los datos mostrados corresponden al mes actual hasta el día y la hora en curso.",
+                                "(*) Descarga solamente los datos filtrados actualmente, por defecto los datos mostrados corresponden al mes actual hasta el día y la hora en curso.",
                               ),
                             ],
                           ),
@@ -1895,19 +1817,11 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.redAccent,
                   size: 50,
                 )),
-            NeumorphicText(
+            Text(
               _rolTitle,
-              style: NeumorphicStyle(
-                  color: _colors.iconsColor(context),
-                  shape: NeumorphicShape.flat,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                  shadowLightColor: _colors.shadowColor(context),
-                  depth: 1.5,
-                  intensity: 0.7),
-              textStyle: NeumorphicTextStyle(
-                fontSize: 15, //customize size here
-                // AND others usual text style properties (fontFamily, fontWeight, ...)
+              style: TextStyle(
+                color: _colors.iconsColor(context),
+                fontSize: 15,
               ),
             ),
             const Divider(),
@@ -1935,41 +1849,22 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(),
             ListTile(
-              leading: NeumorphicIcon(
+              leading: Icon(
                 Icons.logout,
+                color: _colors.iconsColor(context),
                 size: 30,
-                style: NeumorphicStyle(
-                    color: _colors.iconsColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 1,
-                    intensity: 0.7),
               ),
-              title: NeumorphicText(
+              title: Text(
                 ' Cerrar sesión',
-                style: NeumorphicStyle(
+                style: TextStyle(
                   color: _colors.textColor(context),
-                  intensity: 0.7,
-                  depth: 1,
-                  shadowLightColor: _colors.shadowTextColor(context),
-                ),
-                textStyle: NeumorphicTextStyle(
                   fontSize: 14,
                 ),
               ),
-              trailing: NeumorphicIcon(
+              trailing: Icon(
                 Icons.keyboard_arrow_right,
+                color: _colors.iconsColor(context),
                 size: 30,
-                style: NeumorphicStyle(
-                    color: _colors.iconsColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 1,
-                    intensity: 0.7),
               ),
               onTap: () {
                 FormHelper.showMessage(
@@ -1977,7 +1872,7 @@ class _HomePageState extends State<HomePage> {
                   "Embajadores",
                   "¿Cerrar sesión?",
                   "Si",
-                  () async {
+                      () async {
                     final prefs = UserPreferences();
                     prefs.removeValues();
                     await Future.delayed(const Duration(seconds: 2));
@@ -1985,7 +1880,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (BuildContext context) => SignInPage(),
                         ),
-                        (route) => false);
+                            (route) => false);
                   },
                   buttonText2: "No",
                   isConfirmationDialog: true,
@@ -2011,216 +1906,154 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      child: NeumorphicTheme(
-          theme: NeumorphicThemeData(
-            lightSource: LightSource.topLeft,
-            accentColor: NeumorphicColors.accent,
-            appBarTheme: NeumorphicAppBarThemeData(
-                buttonStyle: NeumorphicStyle(
-                  color: _colors.iconsColor(context),
-                  shadowLightColor: _colors.iconsColor(context),
-                  boxShape: const NeumorphicBoxShape.circle(),
-                  shape: NeumorphicShape.flat,
-                  depth: 2,
-                  intensity: 0.9,
-                ),
-                textStyle:
-                    TextStyle(color: _colors.textColor(context), fontSize: 12),
-                iconTheme:
-                    IconThemeData(color: _colors.textColor(context), size: 25)),
-            depth: 1,
-            intensity: 5,
-          ),
-          child: Scaffold(
-            key: _scaffoldKey,
-            appBar: NeumorphicAppBar(
-              leading: GestureDetector(
-                //key: keyLogo,
-                onTap: () {
-                  if (_weSlideController.isOpened) {
-                    _weSlideController.hide();
-                  } else {
-                    _weSlideController.show();
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  child: Stack(
-                    children: <Widget>[
-                      Badge(
-                        key: mainIcon,
-                        showBadge: _showCount,
-                        badgeContent: Consumer<CounterProvider>(
-                          builder: (context, notifier, child) => Text(
-                              notifier.counter.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 12)),
-                        ),
-                        child: NeumorphicIcon(
-                          _mainIcon,
-                          size: 40,
-                          style: NeumorphicStyle(
-                              color: _colors.iconsColor(context),
-                              shape: NeumorphicShape.flat,
-                              boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(10)),
-                              shadowLightColor: _colors.shadowColor(context),
-                              depth: 1.5,
-                              intensity: 0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: _colors.contextColor(context),
+          foregroundColor: _colors.iconsColor(context),
+          leading: GestureDetector(
+            //key: keyLogo,
+            onTap: () {
+              if (_weSlideController.isOpened) {
+                _weSlideController.hide();
+              } else {
+                _weSlideController.show();
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              child: Stack(
                 children: <Widget>[
-                  NeumorphicText(
-                    _title,
-                    //key: keyWelcome,
-                    style: NeumorphicStyle(
-                      color: _colors.iconsColor(context),
-                      intensity: 0.7,
-                      depth: 1.5,
-                      shadowLightColor: _colors.shadowColor(context),
+                  Badge(
+                    key: mainIcon,
+                    showBadge: _showCount,
+                    badgeContent: Consumer<CounterProvider>(
+                      builder: (context, notifier, child) => Text(
+                          notifier.counter.toString(),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12)),
                     ),
-                    textStyle: NeumorphicTextStyle(
-                      fontSize: 18,
+                    child: Icon(
+                      _mainIcon,
+                      size: 40,
                     ),
                   ),
                 ],
               ),
-              automaticallyImplyLeading: false,
-              actions: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    FormHelper.showMessage(
-                      context,
-                      "Embajadores",
-                      "¿Ver tutorial de la sección?",
-                      "Si",
+            ),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                _title,
+                //key: keyWelcome,
+                style: TextStyle(
+                  color: _colors.iconsColor(context),
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                FormHelper.showMessage(
+                  context,
+                  "Embajadores",
+                  "¿Ver tutorial de la sección?",
+                  "Si",
                       () {
-                        setMainTutorial(int.parse(prefs.userRolId));
-                        _showTutorial == false
-                            ? showNoTutorial()
-                            : showTutorial();
-                        Navigator.of(context).pop();
-                      },
-                      buttonText2: "No",
-                      isConfirmationDialog: true,
-                      onPressed2: () {
-                        Navigator.of(context).pop();
-                      },
-                    );
+                    setMainTutorial(int.parse(prefs.userRolId));
+                    _showTutorial == false
+                        ? showNoTutorial()
+                        : showTutorial();
+                    Navigator.of(context).pop();
                   },
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: NeumorphicIcon(
-                      Icons.help_outline,
-                      key: keyHelp,
-                      size: 40,
-                      style: NeumorphicStyle(
-                          color: _colors.iconsColor(context),
-                          shape: NeumorphicShape.flat,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(10)),
-                          shadowLightColor: _colors.shadowColor(context),
-                          depth: 1.5,
-                          intensity: 0.7),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            body: WeSlide(
-              controller: _weSlideController,
-              panelMinSize: panelMinSize,
-              panelMaxSize: _panelMaxSize,
-              overlayColor: _colors.iconsColor(context),
-              overlayOpacity: 0.9,
-              overlay: true,
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.800,
-                          child: pages[_currentIndex]),
-                    ],
-                  ),
+                  buttonText2: "No",
+                  isConfirmationDialog: true,
+                  onPressed2: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  Icons.help_outline,
+                  key: keyHelp,
+                  size: 40,
                 ),
               ),
-              panel: const UserInfo(),
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.startFloat,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 46),
-              child: NeumorphicFloatingActionButton(
-                key: keyMenu,
-                mini: true,
-                style: NeumorphicStyle(
-                    color: _colors.contextColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 2,
-                    intensity: 1),
-                tooltip: 'Inicio',
-                child: Container(
-                  margin: const EdgeInsets.all(2),
-                  child: Icon(
-                    Icons.menu_open,
-                    color: _colors.iconsColor(context),
-                    size: 30,
-                  ),
-                ),
-                onPressed: () async {
-                  _advancedDrawerController.showDrawer();
-                },
+          ],
+        ),
+        body: WeSlide(
+          controller: _weSlideController,
+          panelMinSize: panelMinSize,
+          panelMaxSize: _panelMaxSize,
+          overlayColor: _colors.iconsColor(context),
+          overlayOpacity: 0.9,
+          overlay: true,
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.830,
+                      child: pages[_currentIndex]),
+                ],
               ),
             ),
-          )),
+          ),
+          panel: const UserInfo(),
+        ),
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.startFloat,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 46),
+          child: FloatingActionButton(
+            key: keyMenu,
+            mini: true,
+            heroTag: "menu",
+            tooltip: 'Inicio',
+            backgroundColor: _colors.contextColor(context),
+            child: Container(
+              margin: const EdgeInsets.all(2),
+              child: Icon(
+                Icons.menu_open,
+                color: _colors.iconsColor(context),
+                size: 30,
+              ),
+            ),
+            onPressed: () async {
+              _advancedDrawerController.showDrawer();
+            },
+          ),
+        ),
+      ),
     );
   }
 
   Widget customListTile(IconData iconData, String label, int index) {
     return ListTile(
-      leading: NeumorphicIcon(
+      leading: Icon(
         iconData,
+        color: _colors.iconsColor(context),
         size: 30,
-        style: NeumorphicStyle(
-            color: _colors.iconsColor(context),
-            shape: NeumorphicShape.flat,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-            shadowLightColor: _colors.shadowColor(context),
-            depth: 1,
-            intensity: 0.7),
       ),
-      title: NeumorphicText(
+      title: Text(
         label,
-        style: NeumorphicStyle(
+        style: TextStyle(
           color: _colors.textColor(context),
-          intensity: 0.7,
-          depth: 1,
-          shadowLightColor: _colors.shadowTextColor(context),
-        ),
-        textStyle: NeumorphicTextStyle(
           fontSize: 14,
         ),
       ),
-      trailing: NeumorphicIcon(
+      trailing: Icon(
         Icons.keyboard_arrow_right,
+        color: _colors.iconsColor(context),
         size: 30,
-        style: NeumorphicStyle(
-            color: _colors.iconsColor(context),
-            shape: NeumorphicShape.flat,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-            shadowLightColor: _colors.shadowColor(context),
-            depth: 1,
-            intensity: 0.7),
       ),
       onTap: () {
         setState(() {

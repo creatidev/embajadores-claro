@@ -1,6 +1,5 @@
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 
 class Footer extends StatelessWidget {
   final String? text;
@@ -14,7 +13,7 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CustomColors _colors = CustomColors();
+    CustomColors colors = CustomColors();
     return Center(
       child: GestureDetector(
         onTap: funFooterLogin!(),
@@ -25,21 +24,11 @@ class Footer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              NeumorphicText(
+              Text(
                 text!,
-                style: NeumorphicStyle(
-                    color: _colors.iconsColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 1.5,
-                    intensity: 0.7),
-                textStyle: NeumorphicTextStyle(
-                  fontSize: 18, //customize size here
-
-                  // AND others usual text style properties (fontFamily, fontWeight, ...)
-                ),
+                style: TextStyle(
+                  color: colors.iconsColor(context),
+                  fontSize: 18,),
               ),
               Image.asset(logo!, width: 100)
             ],

@@ -10,9 +10,9 @@ import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:embajadores/ui/home/pages/incidents/local/register_incident.dart';
 import 'package:embajadores/ui/home/pages/stores/register_store.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -21,10 +21,10 @@ class MyStores extends StatefulWidget {
   const MyStores({Key? key}) : super(key: key);
   //final
   @override
-  MyStoresState createState() => MyStoresState();
+  _MyStoresState createState() => _MyStoresState();
 }
 
-class MyStoresState extends State<MyStores> {
+class _MyStoresState extends State<MyStores> {
   final _notesController = TextEditingController();
   final _usersController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -67,41 +67,34 @@ class MyStoresState extends State<MyStores> {
                 (BuildContext context, AsyncSnapshot<List<Owner>> snapshot) {
               return !snapshot.hasData
                   ? const SizedBox(
-                      height: 500,
-                      child: Center(child: CircularProgressIndicator()))
+                  height: 500,
+                  child: Center(child: CircularProgressIndicator()))
                   : SingleChildScrollView(
-                      physics: const ScrollPhysics(),
-                      child: Container(
-                        padding: const EdgeInsets.only(bottom: 120),
-                        child: Wrap(
-                          children: <Widget>[
-                            ListView.builder(
-                              controller: scrollController,
-                              shrinkWrap: true,
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return _assignedStoresCard(
-                                    context, snapshot.data!, index);
-                              },
-                            ),
-                          ],
+                  physics: const ScrollPhysics(),
+                  child: Container(
+                    padding: const EdgeInsets.only(bottom: 120),
+                    child: Wrap(
+                      children: <Widget>[
+                        ListView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _assignedStoresCard(
+                                context, snapshot.data!, index);
+                          },
                         ),
-                      ));
+                      ],
+                    ),
+                  ));
             }),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: NeumorphicFloatingActionButton(
-        //key: keyCancel,
+      floatingActionButton: FloatingActionButton(
         mini: true,
-        style: NeumorphicStyle(
-            color: _colors.contextColor(context),
-            shape: NeumorphicShape.flat,
-            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-            shadowLightColor: _colors.shadowColor(context),
-            depth: 2,
-            intensity: 1),
-        tooltip: 'Cancelar',
+        backgroundColor: _colors.contextColor(context),
+        tooltip: 'Registrar tienda',
         child: Container(
           margin: const EdgeInsets.all(2),
           child: Icon(
@@ -146,21 +139,12 @@ class MyStoresState extends State<MyStores> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              NeumorphicIcon(
+              Icon(
                 Icons.store,
                 size: 40,
-                style: NeumorphicStyle(
-                    color: storeStatus == 'Cerrada'
-                        ? Colors.redAccent
-                        : Colors.green,
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: storeStatus == 'Cerrada'
-                        ? Colors.red
-                        : Colors.greenAccent,
-                    depth: 1,
-                    intensity: 0.7),
+                color:  storeStatus == 'Cerrada'
+                    ? Colors.redAccent
+                    : Colors.green,
               ),
               Text(
                 storeStatus == 'Cerrada' ? 'Cerrada' : 'Abierta',
@@ -243,30 +227,16 @@ class MyStoresState extends State<MyStores> {
                   child: Column(
                     children: <Widget>[
                       (storeStatus == 'Cerrada')
-                          ? NeumorphicIcon(
-                              Icons.login,
-                              size: 40,
-                              style: NeumorphicStyle(
-                                  color: Colors.green,
-                                  shape: NeumorphicShape.flat,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(10)),
-                                  shadowLightColor: Colors.greenAccent,
-                                  depth: 1,
-                                  intensity: 0.7),
-                            )
-                          : NeumorphicIcon(
-                              Icons.logout,
-                              size: 40,
-                              style: NeumorphicStyle(
-                                  color: Colors.red,
-                                  shape: NeumorphicShape.flat,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(10)),
-                                  shadowLightColor: Colors.redAccent,
-                                  depth: 1,
-                                  intensity: 0.7),
-                            )
+                          ? const Icon(
+                        Icons.login,
+                        color: Colors.green,
+                        size: 40,
+                      )
+                          : const Icon(
+                        Icons.logout,
+                        color: Colors.red,
+                        size: 40,
+                      )
                     ],
                   )),
               const VerticalDivider(),
@@ -274,38 +244,31 @@ class MyStoresState extends State<MyStores> {
                 onTap: () {
                   storeStatus == 'Abierta'
                       ? Navigator.push(context, MaterialPageRoute<bool>(
-                          builder: (BuildContext context) {
-                            return RegisterIncident(
-                              owner: storeDetails[index],
-                              index: index,
-                            );
-                          },
-                        )).then((value) {
-                          if (value == true) {
-                            setState(() {
-                              super.widget;
-                            });
-                          }
-                        })
+                    builder: (BuildContext context) {
+                      return RegisterIncident(
+                        owner: storeDetails[index],
+                        index: index,
+                      );
+                    },
+                  )).then((value) {
+                    if (value == true) {
+                      setState(() {
+                        super.widget;
+                      });
+                    }
+                  })
                       : EasyLoading.showInfo(
-                          'Para reportar incidentes, por favor realice apertura de la tienda.',
-                          maskType: EasyLoadingMaskType.custom,
-                          duration: const Duration(milliseconds: 3000),
-                          dismissOnTap: true);
+                      'Para reportar incidentes, por favor realice apertura de la tienda.',
+                      maskType: EasyLoadingMaskType.custom,
+                      duration: const Duration(milliseconds: 3000),
+                      dismissOnTap: true);
                 },
-                child: NeumorphicIcon(
+                child: Icon(
                   Icons.app_registration,
+                  color: storeStatus == 'Abierta'
+                      ? _colors.iconsColor(context)
+                      : Colors.grey,
                   size: 40,
-                  style: NeumorphicStyle(
-                      color: storeStatus == 'Abierta'
-                          ? _colors.iconsColor(context)
-                          : Colors.grey,
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 1,
-                      intensity: 0.7),
                 ),
               ),
             ],
@@ -326,7 +289,7 @@ class MyStoresState extends State<MyStores> {
                     textAlign: TextAlign.justify,
                     style: TextStyle(color: _colors.textColor(context)),
                     overflowReplacement:
-                        const Text('La descripción es muy extensa.'),
+                    const Text('La descripción es muy extensa.'),
                   ),
                 ),
                 Visibility(
@@ -338,7 +301,7 @@ class MyStoresState extends State<MyStores> {
                         'Embajadores',
                         '¿Eliminar asignación $storeName?',
                         'Si',
-                        () {
+                            () {
                           _ownerModel!.id = storeId;
                           _dbService!.deleteOwner(_ownerModel!).then((value) {
                             setState(() {
@@ -354,17 +317,10 @@ class MyStoresState extends State<MyStores> {
                         },
                       );
                     },
-                    child: NeumorphicIcon(
+                    child: const Icon(
                       Icons.delete,
+                      color: Colors.grey,
                       size: 40,
-                      style: NeumorphicStyle(
-                          color: Colors.grey,
-                          shape: NeumorphicShape.flat,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(10)),
-                          shadowLightColor: Colors.blueGrey,
-                          depth: 1,
-                          intensity: 0.7),
                     ),
                   ),
                 ),
@@ -425,7 +381,7 @@ class MyStoresState extends State<MyStores> {
                               errorText: 'Usuarios en operación requeridos'),
                           FormBuilderValidators.notEqual('0',
                               errorText:
-                                  'La cantidad de usuarios no puede ser de 0')
+                              'La cantidad de usuarios no puede ser de 0')
                         ]),
                         decoration: InputDecoration(
                             labelText: 'Usuarios en operación',
@@ -454,7 +410,7 @@ class MyStoresState extends State<MyStores> {
                   if (_formKey.currentState!.saveAndValidate()) {
                     ownerModel.notes = _notesController.text;
                     _openCloseStore!.tipo =
-                        ownerModel.status == 'Cerrada' ? 2 : 3;
+                    ownerModel.status == 'Cerrada' ? 2 : 3;
                     if (ownerModel.status == 'Abierta') {
                       ownerModel.status = 'Cerrada';
                     } else {

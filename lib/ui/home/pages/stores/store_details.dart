@@ -9,7 +9,6 @@ import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -58,12 +57,11 @@ class StoreDetailsState extends State<StoreDetails> {
         // pulseAnimationDuration: Duration(milliseconds: 500),
         // pulseVariation: Tween(begin: 1.0, end: 0.99),
         onFinish: () {}, onClickTarget: (target) {
-      print(target);
-    }, onSkip: () {
-      EasyLoading.showInfo('Tutorial omitido por el usuario.',
-          maskType: EasyLoadingMaskType.custom,
-          duration: const Duration(milliseconds: 1000));
-    })
+        }, onSkip: () {
+          EasyLoading.showInfo('Tutorial omitido por el usuario.',
+              maskType: EasyLoadingMaskType.custom,
+              duration: const Duration(milliseconds: 1000));
+        })
       ..show();
     // tutorial.skip();
     // tutorial.finish();
@@ -107,17 +105,17 @@ class StoreDetailsState extends State<StoreDetails> {
                               ),
                               TextSpan(
                                 text:
-                                    "A continuación visualizará los detalles del estado actual de la tienda seleccionada.\nSolo se mostrarán detalles de las tiendas actualmente abiertas.\n",
+                                "A continuación visualizará los detalles del estado actual de la tienda seleccionada.\nSolo se mostrarán detalles de las tiendas actualmente abiertas.\n",
                               ),
                               WidgetSpan(
                                   child: Icon(
-                                Icons.message,
-                                size: 14,
-                                color: Colors.cyanAccent,
-                              )),
+                                    Icons.message,
+                                    size: 14,
+                                    color: Colors.cyanAccent,
+                                  )),
                               TextSpan(
                                 text:
-                                    " Si lo requiere envíe un mensaje a través de WhatsApp al técnico que tiene asignada actualmente la tienda, no es necesario que lo tenga registrado en sus contactos. (Requiere WhatsApp instalado en su dispositivo).\n\n\n",
+                                " Si lo requiere envíe un mensaje a través de WhatsApp al técnico que tiene asignada actualmente la tienda, no es necesario que lo tenga registrado en sus contactos. (Requiere WhatsApp instalado en su dispositivo).\n\n\n",
                               ),
                             ],
                           ),
@@ -146,257 +144,187 @@ class StoreDetailsState extends State<StoreDetails> {
   Widget build(BuildContext context) {
     String massive = _storeData!.incidentes!.masivo! ? 'Si' : 'No';
     int downServices = _storeData!.incidentes!.serviciosCaidos!;
-    return NeumorphicTheme(
-      theme: NeumorphicThemeData(
-        lightSource: LightSource.topLeft,
-        accentColor: NeumorphicColors.accent,
-        appBarTheme: NeumorphicAppBarThemeData(
-            buttonStyle: NeumorphicStyle(
-              color: _colors.iconsColor(context),
-              shadowLightColor: _colors.iconsColor(context),
-              boxShape: const NeumorphicBoxShape.circle(),
-              shape: NeumorphicShape.flat,
-              depth: 2,
-              intensity: 0.9,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: _colors.contextColor(context),
+        foregroundColor: _colors.iconsColor(context),
+        leading: Container(
+          padding: const EdgeInsets.all(5),
+          child: Stack(
+            children: <Widget>[
+              Badge(
+                //showBadge: _showCount,
+                badgeContent: Text(_storeData!.id.toString()),
+                child: Icon(
+                  Icons.store,
+                  color: _colors.iconsColor(context),
+                  size: 40,
+                ),
+              ),
+            ],
+          ),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              '${_storeData!.nombre}',
+              //key: keyWelcome,
+              style: TextStyle(
+                color: _colors.iconsColor(context),
+                fontSize: 15,
+              ),
             ),
-            textStyle:
-                TextStyle(color: _colors.textColor(context), fontSize: 12),
-            iconTheme:
-                IconThemeData(color: _colors.textColor(context), size: 25)),
-        depth: 1,
-        intensity: 5,
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              FormHelper.showMessage(
+                context,
+                "Embajadores",
+                "¿Ver tutorial de la sección?",
+                "Si",
+                    () {
+                  setMainTutorial();
+                  showTutorial();
+                  Navigator.of(context).pop();
+                },
+                buttonText2: "No",
+                isConfirmationDialog: true,
+                onPressed2: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                Icons.help_outline,
+                color: _colors.iconsColor(context),
+                key: keyHelp,
+                size: 40,
+              ),
+            ),
+          ),
+        ],
       ),
-      child: Scaffold(
-        appBar: NeumorphicAppBar(
-          leading: Container(
-            padding: const EdgeInsets.all(5),
-            child: Stack(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0.0),
+            child: Wrap(
               children: <Widget>[
-                Badge(
-                  //showBadge: _showCount,
-                  badgeContent: Text(_storeData!.id.toString()),
-                  child: NeumorphicIcon(
-                    Icons.store,
-                    size: 40,
-                    style: NeumorphicStyle(
-                        color: _colors.iconsColor(context),
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(10)),
-                        shadowLightColor: _colors.shadowColor(context),
-                        depth: 1.5,
-                        intensity: 0.7),
+                infoContainer(
+                    Icons.store, 'Estado:', _storeData!.descEstado!),
+                infoContainer(Icons.location_city, 'Ciudad:',
+                    _storeData!.ciudad!.nombre!),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    infoContainer(
+                        Icons.error, 'Incidentes:', '$downServices'),
+                    infoContainer(
+                        Icons.warning_amber_rounded, 'Masiva:', massive),
+                  ],
+                ),
+                infoContainer(Icons.support_agent, 'Asignado:',
+                    ' ${_storeData!.usuario!.nombre!}${_storeData!.usuario!.apellidos!}'),
+                Visibility(
+                  visible: _storeData!.usuario!.nombre != 'Sin asignar',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      infoContainer(Icons.smartphone, 'Celular:',
+                          '${_storeData!.usuario!.celular!}'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            launchWhatsApp();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.message,
+                                color: _colors.iconsColor(context),
+                                size: 20,
+                              ),
+                              const Text(
+                                ' Enviar mensaje',
+                                style: TextStyle(fontSize: 12),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                infoContainer(Icons.alternate_email, 'Email:',
+                    ' ${_storeData!.usuario!.email!}'),
+                Row(
+                  children: [
+                    infoContainer(Icons.note, 'Detalles:', ''),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: AutoSizeText(
+                    '${_storeData!.incidentes!.ultimaObservacion}',
+                    textAlign: TextAlign.justify,
+                    minFontSize: 4,
+                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
               ],
             ),
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              NeumorphicText(
-                '${_storeData!.nombre}',
-                //key: keyWelcome,
-                style: NeumorphicStyle(
-                  color: _colors.iconsColor(context),
-                  intensity: 0.7,
-                  depth: 1.5,
-                  shadowLightColor: _colors.shadowColor(context),
-                ),
-                textStyle: NeumorphicTextStyle(
-                  fontSize: 15,
-                ),
-              ),
-            ],
-          ),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                FormHelper.showMessage(
-                  context,
-                  "Embajadores",
-                  "¿Ver tutorial de la sección?",
-                  "Si",
-                  () {
-                    setMainTutorial();
-                    showTutorial();
-                    Navigator.of(context).pop();
-                  },
-                  buttonText2: "No",
-                  isConfirmationDialog: true,
-                  onPressed2: () {
-                    Navigator.of(context).pop();
-                  },
-                );
-              },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              backgroundColor: _colors.contextColor(context),
+              tooltip: 'Atrás',
               child: Container(
-                padding: const EdgeInsets.all(8),
-                child: NeumorphicIcon(
-                  Icons.help_outline,
-                  key: keyHelp,
-                  size: 40,
-                  style: NeumorphicStyle(
-                      color: _colors.iconsColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 1.5,
-                      intensity: 0.7),
+                margin: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.cancel,
+                  color: _colors.iconsColor(context),
+                  size: 30,
                 ),
               ),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
             ),
-          ],
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 0.0),
-              child: Wrap(
-                children: <Widget>[
-                  infoContainer(
-                      Icons.store, 'Estado:', _storeData!.descEstado!),
-                  infoContainer(Icons.location_city, 'Ciudad:',
-                      _storeData!.ciudad!.nombre!),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      infoContainer(
-                          Icons.error, 'Incidentes:', '$downServices'),
-                      infoContainer(
-                          Icons.warning_amber_rounded, 'Masiva:', massive),
-                    ],
-                  ),
-                  infoContainer(Icons.support_agent, 'Asignado:',
-                      ' ${_storeData!.usuario!.nombre!}${_storeData!.usuario!.apellidos!}'),
-                  Visibility(
-                    visible: _storeData!.usuario!.nombre != 'Sin asignar',
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        infoContainer(Icons.smartphone, 'Celular:',
-                            '${_storeData!.usuario!.celular!}'),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: NeumorphicButton(
-                            onPressed: () {
-                              launchWhatsApp();
-                            },
-                            tooltip: 'Enviar mensaje',
-                            style: NeumorphicStyle(
-                                color: _colors.contextColor(context),
-                                shape: NeumorphicShape.flat,
-                                boxShape: const NeumorphicBoxShape.rect(),
-                                shadowLightColor: _colors.shadowColor(context),
-                                depth: 0.3,
-                                intensity: 0.7),
-                            padding: const EdgeInsets.all(5.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.message,
-                                  color: _colors.iconsColor(context),
-                                  size: 20,
-                                ),
-                                const Text(
-                                  ' Enviar mensaje',
-                                  style: TextStyle(fontSize: 12),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  infoContainer(Icons.alternate_email, 'Email:',
-                      ' ${_storeData!.usuario!.email!}'),
-                  Row(
-                    children: [
-                      infoContainer(Icons.note, 'Detalles:', ''),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: AutoSizeText(
-                      '${_storeData!.incidentes!.ultimaObservacion}',
-                      textAlign: TextAlign.justify,
-                      minFontSize: 4,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Container(
-          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              NeumorphicFloatingActionButton(
-                //key: keyCancel,
-                style: NeumorphicStyle(
-                    color: _colors.contextColor(context),
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: _colors.shadowColor(context),
-                    depth: 2,
-                    intensity: 1),
-                tooltip: 'Atrás',
+            Visibility(
+              visible: false, //_storeData!.descEstado! == 'Abierta',
+              child: FloatingActionButton(
+                backgroundColor: _colors.contextColor(context),
+                tooltip: 'Cerrar tienda',
                 child: Container(
                   margin: const EdgeInsets.all(2),
-                  child: Icon(
-                    Icons.cancel,
-                    color: _colors.iconsColor(context),
-                    size: 30,
+                  child: const Icon(
+                    Icons.logout,
+                    color: Colors.redAccent,
+                    size: 50,
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pop(context, false);
+                  _updateStoreStatusDialog(context, _storeData!)
+                      .then((value) => Navigator.pop(context, true));
                 },
               ),
-              Visibility(
-                visible: false, //_storeData!.descEstado! == 'Abierta',
-                child: NeumorphicFloatingActionButton(
-                  //key: keySave,
-                  style: NeumorphicStyle(
-                      color: _colors.contextColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 1),
-                  tooltip: 'Cerrar tienda',
-                  child: Container(
-                    margin: const EdgeInsets.all(2),
-                    child: NeumorphicIcon(
-                      Icons.logout,
-                      size: 50,
-                      style: NeumorphicStyle(
-                          color: Colors.redAccent,
-                          shape: NeumorphicShape.flat,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(10)),
-                          shadowLightColor: Colors.redAccent,
-                          depth: 1.5,
-                          intensity: 0.7),
-                    ),
-                  ),
-                  onPressed: () {
-                    _updateStoreStatusDialog(context, _storeData!)
-                        .then((value) => Navigator.pop(context, true));
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -417,17 +345,10 @@ class StoreDetailsState extends State<StoreDetails> {
       margin: const EdgeInsets.only(top: 10.0),
       child: Row(
         children: <Widget>[
-          NeumorphicIcon(
+          Icon(
             icon,
+            color: _colors.iconsColor(context),
             size: 18,
-            style: NeumorphicStyle(
-                color: _colors.iconsColor(context),
-                shape: NeumorphicShape.flat,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                shadowLightColor: _colors.shadowColor(context),
-                depth: 1.5,
-                intensity: 0.7),
           ),
           Text(
             ' $label',
@@ -495,7 +416,7 @@ class StoreDetailsState extends State<StoreDetails> {
                 onPressed: () {
                   if (_formKey.currentState!.saveAndValidate()) {
                     _openCloseStore!.tipo =
-                        storeData.descEstado == 'Cerrada' ? 2 : 3;
+                    storeData.descEstado == 'Cerrada' ? 2 : 3;
                     _openCloseStore!.idTienda = storeData.id;
                     _openCloseStore!.usuariosOperacion = 0;
                     _openCloseStore!.fechaCierre = DateTime.now().toString();

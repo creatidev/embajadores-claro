@@ -7,7 +7,6 @@ import 'package:embajadores/ui/home/pages/incidents/global/filter_all_incident.d
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:speed_dial_fab/speed_dial_fab.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -15,7 +14,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart'
     hide Alignment, Column, Row, Border;
 
@@ -272,11 +270,7 @@ class _IncidentsQueryState extends State<IncidentsQuery> {
     _endDate =
         DateTime(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59, 999);
     final Email email = Email(
-      body: "Datos compilados por la aplicación embajadores. \n" +
-          'Se adjunta archivo de Excel a este email. \n' +
-          'Fecha inicial: ${formatTime(_startDate!)} \n' +
-          'Fecha final: ${formatTime(_endDate!)} \n' +
-          'Creado: ${formatTime(DateTime.now())}',
+      body: 'Datos compilados por la aplicación embajadores. \nSe adjunta archivo de Excel a este email. \nFecha inicial: ${formatTime(_startDate!)} \nFecha final: ${formatTime(_endDate!)} \nCreado: ${formatTime(DateTime.now())}',
       subject: 'Consulta de datos Embajadores',
       //recipients: ['claroembajadores@gmail.com'],
       isHTML: true,
@@ -366,7 +360,6 @@ class IncidentsDataSource extends DataGridSource {
       GridSummaryColumn? summaryColumn,
       RowColumnIndex rowColumnIndex,
       String summaryValue) {
-    print(summaryValue);
     return Container(
       padding: const EdgeInsets.all(15.0),
       child: Text(summaryValue),

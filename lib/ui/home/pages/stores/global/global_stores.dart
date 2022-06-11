@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:embajadores/data/controllers/themenotifier.dart';
 import 'package:embajadores/data/models/global_stores.dart';
@@ -8,11 +7,8 @@ import 'package:embajadores/data/services/api_service.dart';
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:embajadores/ui/home/pages/stores/store_details.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -67,7 +63,7 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
   var _maxFontSize = 8.0;
   var _iconSize = 20.0;
   List<Sizes> sizes = [];
-
+  Image? _image;
   Future<List<StoreData>> getAllStores(String filter) async {
     final counter = Provider.of<CounterProvider>(context, listen: false);
     var data = apiService.getAllStoresData(filter);
@@ -114,12 +110,12 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.65,
+                          height: MediaQuery.of(context).size.height * 0.68,
                           child: GridView.builder(
                             physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                            SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: _crossAxisCount,
                               crossAxisSpacing: _crossAxisSpacing,
                               mainAxisSpacing: _mainAxisSpacing,
@@ -191,52 +187,51 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
           'Realizar captura'
         ],
         secondaryIconsOnPress: [
-          () => {setSize(0)},
-          () => {setSize(1)},
-          () => {setSize(2)},
-          () => {setSize(3)},
-          () => {
-                EasyLoading.showInfo('Filtro cancelado',
-                        maskType: EasyLoadingMaskType.custom,
-                        duration: const Duration(milliseconds: 3000),
-                        dismissOnTap: true)
-                    .then(
+              () => {setSize(0)},
+              () => {setSize(1)},
+              () => {setSize(2)},
+              () => {setSize(3)},
+              () => {
+            EasyLoading.showInfo('Filtro cancelado',
+                maskType: EasyLoadingMaskType.custom,
+                duration: const Duration(milliseconds: 3000),
+                dismissOnTap: true)
+                .then(
                   (value) {
-                    setState(() => _filter = '');
-                  },
-                )
+                setState(() => _filter = '');
               },
-          () => {
-                setState(() => _filter = ''),
-                Navigator.push(context, MaterialPageRoute<String>(
-                  builder: (BuildContext context) {
-                    return const FilterStores();
-                  },
-                )).then((value) {
-                  if (value != null) {
-                    setState(() {
-                      _filter += value;
-                      super.widget;
-                    });
-                  }
-                })
+            )
+          },
+              () => {
+            setState(() => _filter = ''),
+            Navigator.push(context, MaterialPageRoute<String>(
+              builder: (BuildContext context) {
+                return const FilterStores();
               },
-          () => {
-                _screenshotController
-                    .capture(delay: const Duration(milliseconds: 10))
-                    .then((Uint8List? image) async {
-                  final directory = await getApplicationDocumentsDirectory();
-                  final imagePath =
-                      await File('${directory.path}/estado.png').create();
-                  await imagePath.writeAsBytes(image!);
-                  await Share.shareFiles([imagePath.path],
-                      text: 'Estado global de las tiendas',
-                      subject:
-                          'Vista global del estado actual de las tiendas.');
-                }).catchError((onError) {
-                  print(onError);
-                })
+            )).then((value) {
+              if (value != null) {
+                setState(() {
+                  _filter += value;
+                  super.widget;
+                });
               }
+            })
+          },
+              () => {
+            _screenshotController
+                .capture(delay: const Duration(milliseconds: 10))
+                .then((Uint8List? image) async {
+              final directory = await getApplicationDocumentsDirectory();
+              final imagePath =
+              await File('${directory.path}/estado.png').create();
+              await imagePath.writeAsBytes(image!);
+              await Share.shareFiles([imagePath.path],
+                  text: 'Estado global de las tiendas',
+                  subject:
+                  'Vista global del estado actual de las tiendas.');
+            }).catchError((onError) {
+            })
+          }
         ],
         secondaryBackgroundColor: Colors.blueGrey,
         secondaryForegroundColor: Colors.orange,
@@ -277,7 +272,7 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
         Text(
           quantity,
           style:
-              TextStyle(color: _colors.textColor(context), fontSize: fontSize),
+          TextStyle(color: _colors.textColor(context), fontSize: fontSize),
         )
       ]),
     ]);
@@ -288,17 +283,10 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
       padding: const EdgeInsets.all(5),
       child: Row(
         children: <Widget>[
-          NeumorphicIcon(
+          Icon(
             icon,
+            color: _colors.iconsColor(context),
             size: 18,
-            style: NeumorphicStyle(
-                color: _colors.iconsColor(context),
-                shape: NeumorphicShape.flat,
-                boxShape:
-                    NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                shadowLightColor: _colors.shadowColor(context),
-                depth: 1.5,
-                intensity: 0.7),
           ),
           Text(
             ' $label',
@@ -364,8 +352,8 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
             return StoreDetails(storeData: store);
           },
         )).then((value) => {
-              if (value == true) {setState(() => _filter = ''), super.widget}
-            }); //StoreDetails(storeData: storeData[index]);
+          if (value == true) {setState(() => _filter = ''), super.widget}
+        }); //StoreDetails(storeData: storeData[index]);
       },
       child: Tooltip(
         message: store.nombre!,
@@ -390,8 +378,8 @@ class GlobalStatusStoresState extends State<GlobalStatusStores> {
                     color: store.estado == 0
                         ? Colors.blueGrey
                         : store.incidentes!.serviciosCaidos! > 0
-                            ? Colors.orangeAccent
-                            : Colors.green,
+                        ? Colors.orangeAccent
+                        : Colors.green,
                     size: _iconSize,
                   ),
                   _autoSizeText(store.descEstado!, _visibleItem),

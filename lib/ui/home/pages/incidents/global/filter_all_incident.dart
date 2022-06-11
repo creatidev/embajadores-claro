@@ -8,8 +8,8 @@ import 'package:embajadores/data/models/cities_stores.dart';
 import 'package:embajadores/data/models/failtypes.dart';
 import 'package:embajadores/data/services/api_service.dart';
 import 'package:embajadores/ui/config/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -72,7 +72,6 @@ class FilterAllIncidentsState extends State<FilterAllIncidents> {
         // pulseAnimationDuration: Duration(milliseconds: 500),
         // pulseVariation: Tween(begin: 1.0, end: 0.99),
         onFinish: () {}, onClickTarget: (target) {
-      print(target);
     }, onSkip: () {
       EasyLoading.showInfo('Tutorial omitido por el usuario.',
           maskType: EasyLoadingMaskType.custom,
@@ -382,415 +381,351 @@ class FilterAllIncidentsState extends State<FilterAllIncidents> {
 
   @override
   Widget build(BuildContext context) {
-    return NeumorphicTheme(
-        theme: NeumorphicThemeData(
-          lightSource: LightSource.topLeft,
-          accentColor: NeumorphicColors.accent,
-          appBarTheme: NeumorphicAppBarThemeData(
-              buttonStyle: NeumorphicStyle(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: _colors.contextColor(context),
+        foregroundColor: _colors.iconsColor(context),
+        leading: Container(
+          padding: const EdgeInsets.all(5),
+          child: Stack(
+            children: <Widget>[
+              Icon(
+                Icons.youtube_searched_for,
                 color: _colors.iconsColor(context),
-                shadowLightColor: _colors.iconsColor(context),
-                boxShape: const NeumorphicBoxShape.circle(),
-                shape: NeumorphicShape.flat,
-                depth: 2,
-                intensity: 0.9,
+                size: 50,
               ),
-              textStyle:
-                  TextStyle(color: _colors.textColor(context), fontSize: 12),
-              iconTheme:
-                  IconThemeData(color: _colors.textColor(context), size: 25)),
-          depth: 1,
-          intensity: 5,
+            ],
+          ),
         ),
-        child: Scaffold(
-          appBar: NeumorphicAppBar(
-            leading: Container(
-              padding: const EdgeInsets.all(5),
-              child: Stack(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Consultar',
+              style: TextStyle(
+                color: _colors.iconsColor(context),
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              FormHelper.showMessage(
+                context,
+                "Embajadores",
+                "¿Ver tutorial de la sección?",
+                "Si",
+                    () {
+                  setMainTutorial();
+                  showTutorial();
+                  Navigator.of(context).pop();
+                },
+                buttonText2: "No",
+                isConfirmationDialog: true,
+                onPressed2: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                Icons.help_outline,
+                color: _colors.iconsColor(context),
+                key: keyHelp,
+                size: 40,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 1.1,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(15),
+            child: FormBuilder(
+              child: Column(
                 children: <Widget>[
-                  NeumorphicIcon(
-                    Icons.youtube_searched_for,
-                    size: 50,
-                    style: NeumorphicStyle(
-                        color: _colors.iconsColor(context),
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(10)),
-                        shadowLightColor: _colors.shadowColor(context),
-                        depth: 1.5,
-                        intensity: 0.7),
+                  SfDateRangePicker(
+                    onSelectionChanged: _onSelectionChanged,
+                    selectionMode: DateRangePickerSelectionMode.range,
+                  ),
+                  FormBuilderDropdown(
+                    name: 'type',
+                    decoration: InputDecoration(
+                        labelText: 'Tipo',
+                        prefixIcon: Icon(Icons.lock_open,
+                            color: _colors.iconsColor(context), size: 18)),
+                    hint: const Text('Seleccionar tipo de registro'),
+                    items: onSelectedType.entries
+                        .map<DropdownMenuItem<String>>(
+                            (MapEntry<String, String> e) =>
+                            DropdownMenuItem<String>(
+                              value: e.key,
+                              child: Text(e.value),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      type = int.parse(value.toString());
+                    },
+                  ),
+                  FutureBuilder<List<City>>(
+                      future: apiService.getCities(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<City>> snapshot) {
+                        return !snapshot.hasData
+                            ? const Center(
+                            child: CircularProgressIndicator())
+                            : FormBuilderDropdown<City>(
+                          name: 'city',
+                          //initialValue: _listCity.first,
+                          decoration: InputDecoration(
+                              labelText: 'Ciudad',
+                              prefixIcon: Icon(Icons.location_city,
+                                  color: _colors.iconsColor(context),
+                                  size: 18)),
+                          hint: const Text('Seleccionar ciudad'),
+                          items: snapshot.data!
+                              .map((city) => DropdownMenuItem<City>(
+                              value: city,
+                              child: Text(city.nombre!)))
+                              .toList(),
+                          onChanged: (city) {
+                            if (city != null) {
+                              setState(() {
+                                cityId = city.id!;
+                                _enableStore = true;
+                              });
+                            }
+                          },
+                        );
+                      }),
+                  Visibility(
+                    visible: _enableStore,
+                    child: FutureBuilder<List<Stores>>(
+                        future: apiService.getStoresFromCities(cityId!),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Stores>> snapshot) {
+                          return !snapshot.hasData
+                              ? const Center(
+                              child: CircularProgressIndicator())
+                              : FormBuilderDropdown<Stores>(
+                            name: 'stores',
+                            decoration: InputDecoration(
+                                labelText: 'Tienda',
+                                prefixIcon: Icon(Icons.store,
+                                    color:
+                                    _colors.iconsColor(context),
+                                    size: 18)),
+                            hint: const Text('Seleccionar tienda'),
+                            autovalidateMode:
+                            AutovalidateMode.onUserInteraction,
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText: 'Tienda requerida')
+                            ]),
+                            items: snapshot.data!
+                                .map((stores) =>
+                                DropdownMenuItem<Stores>(
+                                    value: stores,
+                                    child: Text(stores.nombre!)))
+                                .toList(),
+                            onChanged: (stores) {
+                              if (stores != null) {
+                                storeId = stores.id!;
+                              }
+                            },
+                          );
+                        }),
+                  ),
+                  FormBuilderDropdown(
+                    name: 'operate',
+                    decoration: InputDecoration(
+                        labelText: 'Estado de la tienda',
+                        prefixIcon: Icon(Icons.lock_open,
+                            color: _colors.iconsColor(context), size: 18)),
+                    hint: const Text('Seleccionar por estado de la tienda'),
+                    items: onOperationStatus.entries
+                        .map<DropdownMenuItem<String>>(
+                            (MapEntry<String, String> e) =>
+                            DropdownMenuItem<String>(
+                              value: e.key,
+                              child: Text(e.value),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      onOperation = int.parse(value.toString());
+                    },
+                  ),
+                  FutureBuilder<List<ServiceInfo>>(
+                      future: apiService.getServices(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ServiceInfo>> snapshot) {
+                        return !snapshot.hasData
+                            ? const Center(
+                            child: CircularProgressIndicator())
+                            : FormBuilderDropdown<ServiceInfo>(
+                          name: 'service',
+                          decoration: InputDecoration(
+                              labelText: 'Servicio afectado',
+                              prefixIcon: Icon(
+                                  Icons.miscellaneous_services,
+                                  color: _colors.iconsColor(context),
+                                  size: 18)),
+                          hint: const Text(
+                              'Seleccionar servicio afectado'),
+                          items: snapshot.data!
+                              .map((service) =>
+                              DropdownMenuItem<ServiceInfo>(
+                                  value: service,
+                                  child: Text(service.nombre!)))
+                              .toList(),
+                          onChanged: (service) {
+                            selectedService = service!.id!;
+                          },
+                        );
+                      }),
+                  FutureBuilder<List<ServiceStatus>>(
+                      future: apiService.getServiceStatus(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<ServiceStatus>> snapshot) {
+                        return !snapshot.hasData
+                            ? const Center(
+                            child: CircularProgressIndicator())
+                            : FormBuilderDropdown<ServiceStatus>(
+                          name: 'actualStatus',
+                          decoration: InputDecoration(
+                              labelText: 'Estado del incidente',
+                              prefixIcon: Icon(
+                                  Icons.check_box_outlined,
+                                  color: _colors.iconsColor(context),
+                                  size: 18)),
+                          hint: const Text(
+                              'Seleccionar estado del incidente'),
+                          items: snapshot.data!
+                              .map((serviceStatus) =>
+                              DropdownMenuItem<ServiceStatus>(
+                                  value: serviceStatus,
+                                  child:
+                                  Text(serviceStatus.nombre!)))
+                              .toList(),
+                          onChanged: (serviceStatus) {
+                            status = serviceStatus!.id!;
+                          },
+                        );
+                      }),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.85,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error,
+                          color: _colors.iconsColor(context),
+                          size: 20,
+                        ),
+                        const Text('Incidentes masivos'),
+                        Switch(
+                            activeColor: _colors.iconsColor(context),
+                            value: massive,
+                            onChanged: (value) {
+                              setState(() {});
+                              massive = !massive;
+                            }),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                NeumorphicText(
-                  'Consultar',
-                  //key: keyWelcome,
-                  style: NeumorphicStyle(
-                    color: _colors.iconsColor(context),
-                    intensity: 0.7,
-                    depth: 1.5,
-                    shadowLightColor: _colors.shadowColor(context),
-                  ),
-                  textStyle: NeumorphicTextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-            automaticallyImplyLeading: false,
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  FormHelper.showMessage(
-                    context,
-                    "Embajadores",
-                    "¿Ver tutorial de la sección?",
-                    "Si",
-                    () {
-                      setMainTutorial();
-                      showTutorial();
-                      Navigator.of(context).pop();
-                    },
-                    buttonText2: "No",
-                    isConfirmationDialog: true,
-                    onPressed2: () {
-                      Navigator.of(context).pop();
-                    },
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: NeumorphicIcon(
-                    Icons.help_outline,
-                    key: keyHelp,
-                    size: 40,
-                    style: NeumorphicStyle(
-                        color: _colors.iconsColor(context),
-                        shape: NeumorphicShape.flat,
-                        boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(10)),
-                        shadowLightColor: _colors.shadowColor(context),
-                        depth: 1.5,
-                        intensity: 0.7),
-                  ),
-                ),
-              ),
-            ],
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              physics: const ScrollPhysics(),
+        ),
+      ),
+      floatingActionButtonLocation:
+      FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FloatingActionButton(
+              key: keyCancel,
+              backgroundColor: _colors.contextColor(context),
+              heroTag: "cancel_query",
+              tooltip: 'Cancelar',
               child: Container(
-                height: MediaQuery.of(context).size.height * 1.1,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(15),
-                child: FormBuilder(
-                  child: Column(
-                    children: <Widget>[
-                      SfDateRangePicker(
-                        onSelectionChanged: _onSelectionChanged,
-                        selectionMode: DateRangePickerSelectionMode.range,
-                      ),
-                      FormBuilderDropdown(
-                        name: 'type',
-                        decoration: InputDecoration(
-                            labelText: 'Tipo',
-                            prefixIcon: Icon(Icons.lock_open,
-                                color: _colors.iconsColor(context), size: 18)),
-                        hint: const Text('Seleccionar tipo de registro'),
-                        items: onSelectedType.entries
-                            .map<DropdownMenuItem<String>>(
-                                (MapEntry<String, String> e) =>
-                                    DropdownMenuItem<String>(
-                                      value: e.key,
-                                      child: Text(e.value),
-                                    ))
-                            .toList(),
-                        onChanged: (value) {
-                          type = int.parse(value.toString());
-                          print(value);
-                        },
-                      ),
-                      FutureBuilder<List<City>>(
-                          future: apiService.getCities(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<City>> snapshot) {
-                            return !snapshot.hasData
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : FormBuilderDropdown<City>(
-                                    name: 'city',
-                                    //initialValue: _listCity.first,
-                                    decoration: InputDecoration(
-                                        labelText: 'Ciudad',
-                                        prefixIcon: Icon(Icons.location_city,
-                                            color: _colors.iconsColor(context),
-                                            size: 18)),
-                                    hint: const Text('Seleccionar ciudad'),
-                                    items: snapshot.data!
-                                        .map((city) => DropdownMenuItem<City>(
-                                            value: city,
-                                            child: Text(city.nombre!)))
-                                        .toList(),
-                                    onChanged: (city) {
-                                      if (city != null) {
-                                        setState(() {
-                                          cityId = city.id!;
-                                          _enableStore = true;
-                                        });
-                                      }
-                                    },
-                                  );
-                          }),
-                      Visibility(
-                        visible: _enableStore,
-                        child: FutureBuilder<List<Stores>>(
-                            future: apiService.getStoresFromCities(cityId!),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Stores>> snapshot) {
-                              return !snapshot.hasData
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : FormBuilderDropdown<Stores>(
-                                      name: 'stores',
-                                      decoration: InputDecoration(
-                                          labelText: 'Tienda',
-                                          prefixIcon: Icon(Icons.store,
-                                              color:
-                                                  _colors.iconsColor(context),
-                                              size: 18)),
-                                      hint: const Text('Seleccionar tienda'),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
-                                      validator: FormBuilderValidators.compose([
-                                        FormBuilderValidators.required(
-                                            errorText: 'Tienda requerida')
-                                      ]),
-                                      items: snapshot.data!
-                                          .map((stores) =>
-                                              DropdownMenuItem<Stores>(
-                                                  value: stores,
-                                                  child: Text(stores.nombre!)))
-                                          .toList(),
-                                      onChanged: (stores) {
-                                        if (stores != null) {
-                                          storeId = stores.id!;
-                                        }
-                                      },
-                                    );
-                            }),
-                      ),
-                      FormBuilderDropdown(
-                        name: 'operate',
-                        decoration: InputDecoration(
-                            labelText: 'Estado de la tienda',
-                            prefixIcon: Icon(Icons.lock_open,
-                                color: _colors.iconsColor(context), size: 18)),
-                        hint: const Text('Seleccionar por estado de la tienda'),
-                        items: onOperationStatus.entries
-                            .map<DropdownMenuItem<String>>(
-                                (MapEntry<String, String> e) =>
-                                    DropdownMenuItem<String>(
-                                      value: e.key,
-                                      child: Text(e.value),
-                                    ))
-                            .toList(),
-                        onChanged: (value) {
-                          onOperation = int.parse(value.toString());
-                          print(value);
-                        },
-                      ),
-                      FutureBuilder<List<ServiceInfo>>(
-                          future: apiService.getServices(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<ServiceInfo>> snapshot) {
-                            return !snapshot.hasData
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : FormBuilderDropdown<ServiceInfo>(
-                                    name: 'service',
-                                    decoration: InputDecoration(
-                                        labelText: 'Servicio afectado',
-                                        prefixIcon: Icon(
-                                            Icons.miscellaneous_services,
-                                            color: _colors.iconsColor(context),
-                                            size: 18)),
-                                    hint: const Text(
-                                        'Seleccionar servicio afectado'),
-                                    items: snapshot.data!
-                                        .map((service) =>
-                                            DropdownMenuItem<ServiceInfo>(
-                                                value: service,
-                                                child: Text(service.nombre!)))
-                                        .toList(),
-                                    onChanged: (service) {
-                                      selectedService = service!.id!;
-                                    },
-                                  );
-                          }),
-                      FutureBuilder<List<ServiceStatus>>(
-                          future: apiService.getServiceStatus(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<ServiceStatus>> snapshot) {
-                            return !snapshot.hasData
-                                ? const Center(
-                                    child: CircularProgressIndicator())
-                                : FormBuilderDropdown<ServiceStatus>(
-                                    name: 'actualStatus',
-                                    decoration: InputDecoration(
-                                        labelText: 'Estado del incidente',
-                                        prefixIcon: Icon(
-                                            Icons.check_box_outlined,
-                                            color: _colors.iconsColor(context),
-                                            size: 18)),
-                                    hint: const Text(
-                                        'Seleccionar estado del incidente'),
-                                    items: snapshot.data!
-                                        .map((serviceStatus) =>
-                                            DropdownMenuItem<ServiceStatus>(
-                                                value: serviceStatus,
-                                                child: Text(
-                                                    serviceStatus.nombre!)))
-                                        .toList(),
-                                    onChanged: (serviceStatus) {
-                                      status = serviceStatus!.id!;
-                                    },
-                                  );
-                          }),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            NeumorphicIcon(
-                              Icons.error,
-                              size: 20,
-                              style: NeumorphicStyle(
-                                  color: _colors.iconsColor(context),
-                                  shape: NeumorphicShape.flat,
-                                  boxShape: NeumorphicBoxShape.roundRect(
-                                      BorderRadius.circular(10)),
-                                  shadowLightColor:
-                                      _colors.shadowColor(context),
-                                  depth: 1,
-                                  intensity: 0.7),
-                            ),
-                            const Text('Incidentes masivos'),
-                            Switch(
-                                activeColor: _colors.iconsColor(context),
-                                value: massive,
-                                onChanged: (value) {
-                                  setState(() {});
-                                  massive = !massive;
-                                }),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                margin: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.cancel,
+                  color: _colors.iconsColor(context),
+                  size: 30,
                 ),
               ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Container(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                NeumorphicFloatingActionButton(
-                  key: keyCancel,
-                  style: NeumorphicStyle(
-                      color: _colors.contextColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 1),
-                  tooltip: 'Cancelar',
-                  child: Container(
-                    margin: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.cancel,
-                      color: _colors.iconsColor(context),
-                      size: 30,
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+            FloatingActionButton(
+              key: keySave,
+              backgroundColor: _colors.contextColor(context),
+              tooltip: 'Enviar filtro',
+              child: Container(
+                margin: const EdgeInsets.all(2),
+                child: Icon(
+                  Icons.filter_list_alt,
+                  color: _colors.iconsColor(context),
+                  size: 30,
                 ),
-                NeumorphicFloatingActionButton(
-                  key: keySave,
-                  style: NeumorphicStyle(
-                      color: _colors.contextColor(context),
-                      shape: NeumorphicShape.flat,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                          BorderRadius.circular(10)),
-                      shadowLightColor: _colors.shadowColor(context),
-                      depth: 2,
-                      intensity: 1),
-                  tooltip: 'Enviar filtro',
-                  child: Container(
-                    margin: const EdgeInsets.all(2),
-                    child: Icon(
-                      Icons.filter_list_alt,
-                      color: _colors.iconsColor(context),
-                      size: 30,
-                    ),
-                  ),
-                  onPressed: () {
-                    _startDate ??=
-                        DateTime(dateTime.year, dateTime.month, 1).toString();
-                    _endDate ??= DateTime(dateTime.year, dateTime.month,
-                            dateTime.day, 23, 59, 59, 999)
-                        .toString();
-                    if (type > 0) {
-                      filter += 'inc_tipo=$type';
-                    }
-                    if (_startDate != null) {
-                      filter +=
-                          '${fs}inc_fecha_apertura>=' "'" '$_startDate' "'";
-                    }
-                    if (_endDate != null) {
-                      filter += '${fs}inc_fecha_cierre<=' "'" '$_endDate' "'";
-                    }
-                    if (cityId != 0) {
-                      filter += '${fs}id_ciudad=$cityId';
-                    }
-                    if (onOperation != null) {
-                      filter += '${fs}tie_estado_operacion=$onOperation';
-                    }
-                    if (storeId > 0) {
-                      filter += '${fs}id_tienda=$storeId';
-                    }
-                    if (status > 0) {
-                      filter += '${fs}id_estado=$status';
-                    }
-                    if (selectedService > 0) {
-                      filter += '${fs}id_servicio=$selectedService';
-                    }
-                    if (massive == true) {
-                      var masivo = massive == true ? 1 : 0;
-                      filter += '${fs}inc_masivo=$masivo';
-                    }
-                    print(filter);
-                    print(DateTime.now());
-
-                    Navigator.pop(context, filter);
-                  },
-                ),
-              ],
+              ),
+              onPressed: () {
+                _startDate ??=
+                    DateTime(dateTime.year, dateTime.month, 1).toString();
+                _endDate ??= DateTime(dateTime.year, dateTime.month,
+                    dateTime.day, 23, 59, 59, 999)
+                    .toString();
+                if (type > 0) {
+                  filter += 'inc_tipo=$type';
+                }
+                if (_startDate != null) {
+                  filter +=
+                  '${fs}inc_fecha_apertura>=' "'" '$_startDate' "'";
+                }
+                if (_endDate != null) {
+                  filter += '${fs}inc_fecha_cierre<=' "'" '$_endDate' "'";
+                }
+                if (cityId != 0) {
+                  filter += '${fs}id_ciudad=$cityId';
+                }
+                if (onOperation != null) {
+                  filter += '${fs}tie_estado_operacion=$onOperation';
+                }
+                if (storeId > 0) {
+                  filter += '${fs}id_tienda=$storeId';
+                }
+                if (status > 0) {
+                  filter += '${fs}id_estado=$status';
+                }
+                if (selectedService > 0) {
+                  filter += '${fs}id_servicio=$selectedService';
+                }
+                if (massive == true) {
+                  var masivo = massive == true ? 1 : 0;
+                  filter += '${fs}inc_masivo=$masivo';
+                }
+                Navigator.pop(context, filter);
+              },
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {

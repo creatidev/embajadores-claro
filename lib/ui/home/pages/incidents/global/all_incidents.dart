@@ -1,21 +1,16 @@
 import 'dart:convert';
-
 import 'package:auto_size_text_pk/auto_size_text_pk.dart';
 import 'package:embajadores/data/controllers/themenotifier.dart';
 import 'package:embajadores/data/models/incidents.dart';
 import 'package:embajadores/data/services/api_service.dart';
-import 'package:embajadores/data/services/db_service.dart';
 import 'package:embajadores/ui/config/colors.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
-import 'package:embajadores/ui/home/pages/incidents/global/filter_active_incidents.dart';
 import 'package:embajadores/ui/home/pages/incidents/global/incident_details.dart';
 import 'package:embajadores/ui/home/pages/incidents/global/resume_incidents.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:speed_dial_fab/speed_dial_fab.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -60,7 +55,7 @@ class AllIncidentsState extends State<AllIncidents> {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController _scrollController = ScrollController();
+    final ScrollController scrollController = ScrollController();
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<List<Incident>>(
@@ -90,7 +85,7 @@ class AllIncidentsState extends State<AllIncidents> {
                         Wrap(
                           children: <Widget>[
                             ListView.builder(
-                                controller: _scrollController,
+                                controller: scrollController,
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
                                 itemCount: snapshot.data!.length,
@@ -218,25 +213,18 @@ class AllIncidentsState extends State<AllIncidents> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              NeumorphicIcon(
+              Icon(
                 serviceMassive == 1
                     ? Icons.local_fire_department_sharp
                     : Icons.warning_amber_outlined,
+                color: serviceStatusId == 1
+                    ? Colors.redAccent
+                    : serviceStatusId == 2
+                    ? Colors.orangeAccent
+                    : serviceStatusId == 3
+                    ? Colors.grey
+                    : null,
                 size: 20,
-                style: NeumorphicStyle(
-                    color: serviceStatusId == 1
-                        ? Colors.redAccent
-                        : serviceStatusId == 2
-                            ? Colors.orangeAccent
-                            : serviceStatusId == 3
-                                ? Colors.grey
-                                : null,
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: Colors.redAccent,
-                    depth: 1,
-                    intensity: 0.7),
               ),
               Text(
                 serviceStatus,
@@ -303,17 +291,10 @@ class AllIncidentsState extends State<AllIncidents> {
                   }
                 });
               },
-              child: NeumorphicIcon(
+              child: const Icon(
                 Icons.app_registration,
+                color: Colors.red,
                 size: 20,
-                style: NeumorphicStyle(
-                    color: Colors.red,
-                    shape: NeumorphicShape.flat,
-                    boxShape:
-                        NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                    shadowLightColor: Colors.redAccent,
-                    depth: 1,
-                    intensity: 0.7),
               )),
         ),
         children: <Widget>[

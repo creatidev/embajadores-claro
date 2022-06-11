@@ -6,7 +6,7 @@ import 'package:embajadores/ui/config/colors.dart';
 import 'package:embajadores/ui/config/user_preferences.dart';
 import 'package:embajadores/ui/home/pages/incidents/global/incident_details.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:flutter_neumorphic_null_safety/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -18,10 +18,10 @@ class MyIncidents extends StatefulWidget {
 
   //final
   @override
-  _MyIncidentsState createState() => _MyIncidentsState();
+  MyIncidentsState createState() => MyIncidentsState();
 }
 
-class _MyIncidentsState extends State<MyIncidents> {
+class MyIncidentsState extends State<MyIncidents> {
   final CustomColors _colors = CustomColors();
   APIService apiService = APIService();
   final prefs = UserPreferences();
@@ -57,27 +57,27 @@ class _MyIncidentsState extends State<MyIncidents> {
                 (BuildContext context, AsyncSnapshot<List<Incident>> snapshot) {
               return !snapshot.hasData
                   ? const SizedBox(
-                      height: 500,
-                      child: Center(child: CircularProgressIndicator()))
+                  height: 500,
+                  child: Center(child: CircularProgressIndicator()))
                   : SingleChildScrollView(
-                      physics: const ScrollPhysics(),
-                      child: Container(
-                        padding: const EdgeInsets.only(bottom: 120),
-                        child: Wrap(
-                          children: <Widget>[
-                            ListView.builder(
-                                controller: scrollController,
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: snapshot.data!.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return _registeredIncidentCard(
-                                      context, snapshot.data!, index);
-                                }),
-                          ],
-                        ),
-                      ),
-                    );
+                physics: const ScrollPhysics(),
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 120),
+                  child: Wrap(
+                    children: <Widget>[
+                      ListView.builder(
+                          controller: scrollController,
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return _registeredIncidentCard(
+                                context, snapshot.data!, index);
+                          }),
+                    ],
+                  ),
+                ),
+              );
             }),
       ),
     );
@@ -92,7 +92,7 @@ class _MyIncidentsState extends State<MyIncidents> {
     var serviceStore = incidentDetails[index].tieNombre.toString();
     var serviceUsers = incidentDetails[index].incUsuariosOperacion.toString();
     var serviceAffected =
-        incidentDetails[index].incUsuariosAfectados.toString();
+    incidentDetails[index].incUsuariosAfectados.toString();
     var serviceStatusId = incidentDetails[index].idEstado;
     var serviceStatus = incidentDetails[index].ineNombre.toString();
     var serviceOwner = incidentDetails[index].serNombre.toString();
@@ -110,19 +110,12 @@ class _MyIncidentsState extends State<MyIncidents> {
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            NeumorphicIcon(
+            Icon(
               Icons.warning_amber,
+              color: serviceStatusId == 1
+                  ? Colors.redAccent
+                  : Colors.orangeAccent,
               size: 40,
-              style: NeumorphicStyle(
-                  color: serviceStatusId == 1
-                      ? Colors.redAccent
-                      : Colors.orangeAccent,
-                  shape: NeumorphicShape.flat,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10)),
-                  shadowLightColor: Colors.redAccent,
-                  depth: 1,
-                  intensity: 0.7),
             ),
             Text(
               serviceStatus,
@@ -231,25 +224,18 @@ class _MyIncidentsState extends State<MyIncidents> {
                             context,
                             MaterialPageRoute<bool>(
                                 builder: (context) => IncidentDetailsUpdate(
-                                      incident: incidentDetails[index],
-                                      expanded: expanded,
-                                    ))).then((value) {
+                                  incident: incidentDetails[index],
+                                  expanded: expanded,
+                                ))).then((value) {
                           if (value == true) {
                             setState(() => super.widget);
                           }
                         });
                       },
-                      child: NeumorphicIcon(
+                      child: const Icon(
                         Icons.app_registration,
+                        color: Colors.red,
                         size: 40,
-                        style: NeumorphicStyle(
-                            color: Colors.red,
-                            shape: NeumorphicShape.flat,
-                            boxShape: NeumorphicBoxShape.roundRect(
-                                BorderRadius.circular(10)),
-                            shadowLightColor: Colors.redAccent,
-                            depth: 1,
-                            intensity: 0.7),
                       )),
                 ],
               ),
@@ -283,7 +269,7 @@ class _MyIncidentsState extends State<MyIncidents> {
                   textAlign: TextAlign.justify,
                   style: TextStyle(color: _colors.textColor(context)),
                   overflowReplacement:
-                      const Text('La descripción es muy extensa'),
+                  const Text('La descripción es muy extensa'),
                 ),
               ],
             ),
